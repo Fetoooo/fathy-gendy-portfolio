@@ -1,0 +1,36 @@
+          <!-- Page 14: Colophon & The End -->
+          @if (currentPage() === 14) {
+            <div id="m-colophon-container-id" class="flex flex-col items-center justify-center text-center h-full py-12 space-y-4">
+              <h3 id="m-colophon-lbl-id" class="font-serif text-stone-800 text-xl font-bold uppercase tracking-widest">The End</h3>
+              <p id="m-colophon-text-id" class="font-serif italic text-stone-600/70 text-[10px] max-w-[22ch] leading-relaxed mb-4">
+                Finis
+              </p>
+              <div id="m-colophon-div-id" class="w-8 h-[1px] bg-amber-800/20"></div>
+              <h3 id="m-colophon-lbl-id-2" class="font-serif text-amber-800 text-[10px] font-bold uppercase tracking-widest mt-4">Colophon</h3>
+              <p id="m-colophon-text-id-2" class="font-serif italic text-stone-600 text-[10px] max-w-[22ch] leading-relaxed mb-6">
+                Handcrafted in Zoneless Angular, typeset in Inter &amp; JetBrains Mono, and deployed on GitHub Pages.
+              </p>
+              <button type="button" id="m-colophon-next-btn" class="px-4 py-1.5 border border-stone-800/30 hover:bg-stone-800/5 rounded-full text-stone-700 font-mono text-[9px] tracking-widest uppercase transition active:scale-95 cursor-pointer bg-transparent flex items-center justify-center gap-1.5 mt-8 z-10" (click)="closeJournal()">
+                Close Journal <mat-icon class="text-xs">arrow_forward</mat-icon>
+              </button>
+            </div>
+          }
+
+          <!-- Page 15: Back Cover -->
+          @if (currentPage() === 15) {
+            <div id="m-cov-back-id" class="flex flex-col items-center justify-center text-center h-full py-12 space-y-6 relative w-full">
+              <div class="cover-inner-border"></div>
+              <div class="gold-corner top-left"></div>
+              <div class="gold-corner top-right"></div>
+              <div class="gold-corner bottom-left"></div>
+              <div class="gold-corner bottom-right"></div>
+
+              <div id="m-cov-back-crest-id" class="text-yellow-500 text-3xl font-serif z-10 animate-pulse">☬</div>
+              <div id="m-cov-back-brand-id" class="font-serif text-base tracking-[0.2em] uppercase text-yellow-200 font-bold z-10">FATHY GENDY</div>
+              <div id="m-cov-back-tag-id" class="font-mono text-[9px] text-amber-300/60 uppercase tracking-wider z-10">Software Engineer · Cairo</div>
+                
+              <button id="m-cov-back-btn-id" class="mt-6 px-4 py-1.5 border border-yellow-500/40 hover:bg-yellow-500/10 rounded-full text-yellow-200 font-mono text-[9px] uppercase tracking-widest cursor-pointer bg-transparent z-10 transition active:scale-95" (click)="closeJournal()">
+                Go to Front Cover
+              </button>
+            </div>
+          }

@@ -1,0 +1,956 @@
+/* Cozy Desk Environment & 3D Book Portfolio Styles */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0c0f17;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Scrollbar Customization for scrollable page content */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Desk Surface Background */
+.desk-surface {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 50%, #161c28 0%, #0a0d14 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow: hidden;
+  perspective: 2500px; /* Essential for overall desk perspective */
+}
+
+/* Beautiful wood/slate grain texture */
+.desk-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: 
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0px, transparent 1px, transparent 4px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, transparent 1px, transparent 4px);
+}
+
+/* Ambient Cozy Glow Overlay (Desk Lamp) */
+.desk-glow {
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle at 15% 15%, rgba(253, 186, 116, 0.12) 0%, rgba(253, 186, 116, 0.03) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.desk-glow.lamp-off {
+  opacity: 0;
+}
+
+/* Lamp Base & Shade (Tactile Toggle) */
+.desk-lamp-container {
+  position: absolute;
+  top: -40px;
+  left: 40px;
+  width: 180px;
+  height: 240px;
+  z-index: 20;
+  transform: rotate(5deg);
+  pointer-events: auto;
+}
+
+.desk-lamp {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.lamp-shade {
+  position: absolute;
+  bottom: 0;
+  left: 30px;
+  width: 120px;
+  height: 90px;
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+  border-radius: 60px 60px 10px 10px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    inset 0 4px 10px rgba(255,255,255,0.15);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.lamp-shade:hover {
+  transform: translateY(2px) scale(1.02);
+}
+
+.lamp-shade::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 10%;
+  width: 80%;
+  height: 12px;
+  background: #f59e0b;
+  border-radius: 50%;
+  filter: blur(4px);
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.lamp-shade.off::after {
+  opacity: 0;
+  background: #451a03;
+}
+
+.lamp-bulb-glow {
+  position: absolute;
+  bottom: -40px;
+  left: 50px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.8) 0%, rgba(251, 146, 60, 0.2) 60%, transparent 100%);
+  filter: blur(8px);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.lamp-bulb-glow.off {
+  opacity: 0;
+}
+
+.lamp-stand {
+  position: absolute;
+  top: 0;
+  left: 70px;
+  width: 12px;
+  height: 150px;
+  background: linear-gradient(90deg, #6b3e10 0%, #452103 100%);
+  border-radius: 6px;
+  box-shadow: inset 2px 0 5px rgba(255,255,255,0.1);
+}
+
+.lamp-base {
+  position: absolute;
+  top: -15px;
+  left: 55px;
+  width: 42px;
+  height: 30px;
+  background: #27272a;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  border-top: 2px solid #52525b;
+}
+
+/* Coffee Cup with Steam */
+.desk-coffee {
+  position: absolute;
+  bottom: 40px;
+  right: 50px;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.95;
+}
+
+.coffee-cup {
+  width: 65px;
+  height: 55px;
+  background: linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 100%);
+  border-radius: 0 0 25px 25px;
+  position: relative;
+  box-shadow: 
+    0 12px 20px rgba(0, 0, 0, 0.4),
+    inset -4px -4px 10px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.coffee-handle {
+  position: absolute;
+  top: 10px;
+  right: -16px;
+  width: 22px;
+  height: 28px;
+  border: 4px solid #d4d4d8;
+  border-left: none;
+  border-radius: 0 14px 14px 0;
+}
+
+.coffee-liquid {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(100% - 8px);
+  height: 8px;
+  background: #3b2314;
+  border-radius: 50%;
+  border: 1px solid #271206;
+}
+
+.coffee-plate {
+  width: 85px;
+  height: 10px;
+  background: #d4d4d8;
+  border-radius: 50%;
+  margin-top: 2px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+/* Steaming coffee animation */
+.steam-container {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  height: 25px;
+  margin-bottom: 2px;
+}
+
+.steam-line {
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 1px;
+  filter: blur(1px);
+  animation: steam 2.5s infinite ease-in-out;
+}
+
+.steam-line:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.steam-line:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+@keyframes steam {
+  0% {
+    transform: translateY(10px) scaleX(1);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0px) scaleX(1.5) rotate(5deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-12px) scaleX(2) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+/* Glasses resting on desk */
+.desk-glasses {
+  position: absolute;
+  top: 40px;
+  right: 60px;
+  width: 120px;
+  height: 40px;
+  z-index: 10;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  transform: rotate(-15deg);
+}
+
+.glasses-lens {
+  width: 38px;
+  height: 38px;
+  border: 2px solid #a3a3a3;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.3),
+    inset 0 0 5px rgba(255,255,255,0.2);
+  position: relative;
+}
+
+.glasses-lens::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+}
+
+.glasses-bridge {
+  width: 14px;
+  height: 6px;
+  border-top: 2px solid #a3a3a3;
+  border-radius: 50% 50% 0 0;
+}
+
+.glasses-arm-left, .glasses-arm-right {
+  position: absolute;
+  width: 45px;
+  height: 2px;
+  background: #737373;
+  top: 18px;
+  transform-origin: left center;
+}
+
+.glasses-arm-left {
+  left: -40px;
+  transform: rotate(-30deg);
+}
+
+.glasses-arm-right {
+  right: -40px;
+  transform-origin: right center;
+  transform: rotate(30deg);
+}
+
+/* Vintage Fountain Pen */
+.desk-pen {
+  position: absolute;
+  bottom: 80px;
+  left: 60px;
+  width: 160px;
+  height: 14px;
+  z-index: 10;
+  transform: rotate(25deg);
+  display: flex;
+  align-items: center;
+}
+
+.pen-body {
+  width: 110px;
+  height: 8px;
+  background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
+  border-radius: 4px 0 0 4px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+.pen-cap {
+  width: 40px;
+  height: 10px;
+  background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
+  border-radius: 0 4px 4px 0;
+  border-left: 2px solid #fbbf24;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+
+.pen-clip {
+  position: absolute;
+  top: 1px;
+  left: 8px;
+  width: 20px;
+  height: 2px;
+  background: #fbbf24;
+  border-radius: 1px;
+}
+
+
+/* ---- THE 3D BOOK ---- */
+
+.book-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 580px;
+  margin: 1.5rem auto;
+  z-index: 5;
+  transition: transform 0.3s ease;
+}
+
+/* Standard Double-Page Book container */
+.book-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Spine central axis */
+.book-spine-hinge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 12px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(255,255,255,0.08) 50%, rgba(0,0,0,0.4) 100%);
+  box-shadow: 
+    inset 1px 0 3px rgba(255,255,255,0.1),
+    0 0 15px rgba(0,0,0,0.6);
+  z-index: 15;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/* Outer Leather Cover Frame */
+.book-cover-underlay {
+  position: absolute;
+  inset: -12px -16px -12px -16px;
+  background: radial-gradient(circle at 50% 50%, #451017 0%, #29080c 100%);
+  border-radius: 12px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(0, 0, 0, 0.4),
+    inset 0 0 10px rgba(0,0,0,0.8);
+  z-index: 1;
+  pointer-events: none;
+  border: 1px solid rgba(251, 191, 36, 0.15);
+}
+
+.book-cover-underlay::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 8px;
+}
+
+/* Leather Spine Backing */
+.book-cover-spine {
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: 50%;
+  width: 32px;
+  background: #1b0407;
+  transform: translateX(-50%);
+  z-index: 1;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.9);
+  border-left: 1px solid rgba(251, 191, 36, 0.1);
+  border-right: 1px solid rgba(251, 191, 36, 0.1);
+}
+
+/* Interactive 3D Stack of Pages */
+.book-page-sheet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  left: 50%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+}
+
+.book-page-sheet.is-flipping {
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Left side of open sheets */
+.book-page-sheet.flipped-left {
+  transform: rotateY(-180deg);
+}
+
+/* Individual page faces */
+.page-side {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: #fdfaf2;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, rgba(245, 237, 218, 0.9) 100%);
+  box-shadow: inset 4px 0 12px rgba(0,0,0,0.05);
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Subtle paper lines overlay for authentic journal feel */
+.page-side::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.005) 0px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.005) 0px, transparent 1px, transparent 3px);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Back of sheet has to rotate to be legible */
+.page-side.back {
+  transform: rotateY(180deg);
+  border-radius: 4px 0 0 4px;
+  box-shadow: inset -4px 0 12px rgba(0,0,0,0.05);
+}
+
+/* Left/Right Inner spine binding shadows for depth */
+.page-side.front::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.page-side.back::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 30px;
+  background: linear-gradient(-90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+/* Realistic page curl shadow during transition */
+.page-side-highlight {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Cover specific styling (leather, gold foil, custom inserts) */
+.page-side.cover-skin {
+  background: radial-gradient(circle at 30% 30%, #521319 0%, #2e080b 100%);
+  color: #fef08a;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+}
+
+.page-side.cover-skin::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 2px solid rgba(251, 191, 36, 0.25);
+  pointer-events: none;
+}
+
+.page-side.cover-skin .cover-inner-border {
+  position: absolute;
+  inset: 18px;
+  border: 1px dashed rgba(251, 191, 36, 0.15);
+  pointer-events: none;
+}
+
+/* Gold corners for cover */
+.gold-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #eab308;
+  z-index: 5;
+}
+
+.gold-corner.top-left { top: 14px; left: 14px; border-right: none; border-bottom: none; }
+.gold-corner.top-right { top: 14px; right: 14px; border-left: none; border-bottom: none; }
+.gold-corner.bottom-left { bottom: 14px; left: 14px; border-right: none; border-top: none; }
+.gold-corner.bottom-right { bottom: 14px; right: 14px; border-left: none; border-top: none; }
+
+/* Dynamic Page Thickness Stack Graphics on sides of the book */
+.book-thickness-left, .book-thickness-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: #dfd5b5;
+  z-index: 2;
+  transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+}
+
+.book-thickness-left {
+  right: 50%;
+  transform-origin: right center;
+  border-radius: 4px 0 0 4px;
+}
+
+.book-thickness-right {
+  left: 50%;
+  transform-origin: left center;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Bookmark Ribbon Tabs protruding from sides */
+.ribbon-tabs-container {
+  position: absolute;
+  top: 15px;
+  right: -52px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+
+.ribbon-tab {
+  width: 52px;
+  height: 26px;
+  background: var(--ribbon-color, #dc2626);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transform-origin: left center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ribbon-tab:hover {
+  width: 60px;
+  padding-left: 6px;
+  filter: brightness(1.1);
+}
+
+/* Wax Seal Letter Contact Module */
+.wax-seal-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parchment-letter {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #fdfaf2;
+  border-radius: 4px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(0);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 2;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.parchment-letter.unsealed {
+  transform: translateY(-80px) scale(1.02);
+  z-index: 10;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  height: 110%;
+}
+
+.wax-seal-btn {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(circle at 35% 35%, #ef4444 0%, #991b1b 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fef08a;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 10px rgba(0,0,0,0.4),
+    inset -3px -3px 6px rgba(0,0,0,0.3);
+  z-index: 5;
+  transition: all 0.3s;
+  border: 2px solid #b91c1c;
+}
+
+.wax-seal-btn:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.wax-seal-btn::before {
+  content: 'FG';
+  font-family: var(--font-serif);
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.seal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.03);
+  pointer-events: none;
+  z-index: 3;
+}
+
+
+/* ---- BRASS TACTILE CONTROL DECK ---- */
+
+.brass-controls-deck {
+  margin-top: 1.5rem;
+  background: linear-gradient(180deg, #d97706 0%, #b45309 50%, #78350f 100%);
+  border: 2px solid #fbbf24;
+  border-radius: 30px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 
+    0 15px 30px rgba(0,0,0,0.5),
+    inset 0 2px 4px rgba(255,255,255,0.2);
+  z-index: 10;
+}
+
+.brass-btn {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #f59e0b;
+  color: #fbbf24;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+
+.brass-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #334155;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.brass-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.brass-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #78350f;
+}
+
+.brass-counter {
+  font-family: var(--font-mono);
+  color: #fef08a;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  min-width: 90px;
+  text-align: center;
+}
+
+
+/* ---- RESPONSIVE MOBILE VIEWPORT (SINGLE PAGE BOOK) ---- */
+
+@media (max-width: 639px) {
+  .desk-surface {
+    padding: 1rem 0.5rem 3rem;
+  }
+  
+  .desk-lamp-container {
+    display: none; /* Hide cluttered objects on mobile screen */
+  }
+  .desk-glasses {
+    display: none;
+  }
+  .desk-pen {
+    display: none;
+  }
+  .desk-coffee {
+    display: none;
+  }
+
+  .book-viewport {
+    width: 94%;
+    max-width: 480px;
+    height: 80vh;
+    max-height: 620px;
+    margin: 0.5rem auto;
+  }
+
+  .book-cover-underlay {
+    inset: -6px -8px -6px -8px;
+    border-radius: 8px;
+  }
+
+  .book-cover-spine {
+    display: none; /* Hinge is on the left edge for single page mobile book */
+  }
+
+  .book-page-sheet {
+    width: 100%;
+    left: 0;
+    transform-origin: left center;
+  }
+
+  .page-side {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .book-thickness-left, .book-thickness-right {
+    display: none; /* Simplify stacking thickness on small devices */
+  }
+
+  .ribbon-tabs-container {
+    display: none; /* Ribbons take too much horizontal space */
+  }
+}
+
+
+/* ---- MOBILE 3D CARD TURN ANIMATIONS ---- */
+
+.flipping-next {
+  animation: mobile-flip-next 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.flipping-prev {
+  animation: mobile-flip-prev 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes mobile-flip-next {
+  0% {
+    transform: perspective(1200px) rotateY(0deg);
+    transform-origin: left center;
+    opacity: 1;
+    filter: brightness(1);
+  }
+  49% {
+    transform: perspective(1200px) rotateY(-90deg);
+    transform-origin: left center;
+    opacity: 0.2;
+    filter: brightness(0.6);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(-90deg);
+    opacity: 0;
+  }
+  51% {
+    transform: perspective(1200px) rotateY(90deg);
+    transform-origin: left center;
+    opacity: 0;
+  }
+  52% {
+    transform: perspective(1200px) rotateY(90deg);
+    transform-origin: left center;
+    opacity: 0.2;
+    filter: brightness(0.6);
+  }
+  100% {
+    transform: perspective(1200px) rotateY(0deg);
+    transform-origin: left center;
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes mobile-flip-prev {
+  0% {
+    transform: perspective(1200px) rotateY(0deg);
+    transform-origin: left center;
+    opacity: 1;
+    filter: brightness(1);
+  }
+  49% {
+    transform: perspective(1200px) rotateY(90deg);
+    transform-origin: left center;
+    opacity: 0.2;
+    filter: brightness(0.6);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(90deg);
+    opacity: 0;
+  }
+  51% {
+    transform: perspective(1200px) rotateY(-90deg);
+    transform-origin: left center;
+    opacity: 0;
+  }
+  52% {
+    transform: perspective(1200px) rotateY(-90deg);
+    transform-origin: left center;
+    opacity: 0.2;
+    filter: brightness(0.6);
+  }
+  100% {
+    transform: perspective(1200px) rotateY(0deg);
+    transform-origin: left center;
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* Desktop Page Turning Floating Arrows */
+.desktop-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  background: rgba(253, 250, 242, 0.9);
+  border: 1px solid rgba(180, 83, 9, 0.25);
+  color: #78350f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 50;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.desktop-nav-arrow:hover:not(.disabled) {
+  background: #fcf6e8;
+  color: #92400e;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.25);
+}
+
+.desktop-nav-arrow:active:not(.disabled) {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.desktop-nav-arrow.left {
+  left: -70px;
+}
+
+.desktop-nav-arrow.right {
+  right: -70px;
+}
+
+.desktop-nav-arrow.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+

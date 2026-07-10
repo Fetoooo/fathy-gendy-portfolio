@@ -1,0 +1,1509 @@
+<!-- Ambient Desk Lamp, coffee steam, and a real 3D interactive portfolio of Fathy Gendy -->
+
+<div id="desk-surface-id" class="desk-surface">
+  <!-- Glowing overlay cast by desk lamp -->
+  <div id="desk-glow-id" class="desk-glow" [class.lamp-off]="!isLampOn()"></div>
+
+  <!-- Decorative Desk Objects -->
+  
+  <!-- Desk Lamp (Top Left) -->
+  <div id="desk-lamp-container-id" class="desk-lamp-container">
+    <div id="desk-lamp-id" class="desk-lamp">
+      <div id="lamp-stand-id" class="lamp-stand"></div>
+      <div id="lamp-base-id" class="lamp-base"></div>
+      <!-- Interactive shade clicking toggles lamp -->
+      <button type="button" id="lamp-shade-id" class="lamp-shade block cursor-pointer border-0 p-0" [class.off]="!isLampOn()" (click)="toggleLamp()" aria-label="Toggle Desk Lamp"></button>
+      <div id="lamp-bulb-glow-id" class="lamp-bulb-glow" [class.off]="!isLampOn()"></div>
+    </div>
+  </div>
+
+  <!-- Glasses (Top Right) -->
+  <div id="desk-glasses-id" class="desk-glasses">
+    <div id="lens-left-id" class="glasses-lens"></div>
+    <div id="bridge-id" class="glasses-bridge"></div>
+    <div id="lens-right-id" class="glasses-lens"></div>
+    <div id="arm-left-id" class="glasses-arm-left"></div>
+    <div id="arm-right-id" class="glasses-arm-right"></div>
+  </div>
+
+  <!-- Fountain Pen (Bottom Left) -->
+  <div id="desk-pen-id" class="desk-pen">
+    <div id="pen-body-id" class="pen-body">
+      <div id="pen-clip-id" class="pen-clip"></div>
+    </div>
+    <div id="pen-cap-id" class="pen-cap"></div>
+  </div>
+
+  <!-- Coffee Cup with Animated Steam (Bottom Right) -->
+  <div id="desk-coffee-id" class="desk-coffee">
+    <div id="steam-container-id" class="steam-container">
+      <div id="steam-1-id" class="steam-line"></div>
+      <div id="steam-2-id" class="steam-line"></div>
+      <div id="steam-3-id" class="steam-line"></div>
+    </div>
+    <div id="coffee-cup-id" class="coffee-cup">
+      <div id="coffee-handle-id" class="coffee-handle"></div>
+      <div id="coffee-liquid-id" class="coffee-liquid"></div>
+    </div>
+    <div id="coffee-plate-id" class="coffee-plate"></div>
+  </div>
+
+
+  <!-- ---- MAIN PORTFOLIO BOOK AREA ---- -->
+
+  <div id="book-viewport-id" class="book-viewport" [style.transform]="'scale(' + bookScale() + ')'" [style.transform-origin]="'center center'">
+    
+    @if (!isMobile()) {
+      <!-- Floating Navigation Arrow: Previous (Left side of book) -->
+      <button type="button" id="desktop-prev-btn" class="desktop-nav-arrow left" [class.disabled]="currentSheet() === 0" (click)="prevSheet()" aria-label="Previous Sheet">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <!-- Floating Navigation Arrow: Next (Right side of book) -->
+      <button type="button" id="desktop-next-btn" class="desktop-nav-arrow right" [class.disabled]="currentSheet() === totalSheets - 1" (click)="nextSheet()" aria-label="Next Sheet">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+
+      <!-- DESKTOP SPREAD VIEW (FULL 3D TRANSLATING BOOK ENGINE) -->
+      <div id="book-3d-id" class="book-3d">
+        <!-- Underlay: Leather Cover -->
+        <div id="book-cover-underlay-id" class="book-cover-underlay"></div>
+        <div id="book-cover-spine-id" class="book-cover-spine"></div>
+        <div id="book-spine-hinge-id" class="book-spine-hinge"></div>
+
+        <!-- Layered Page thickness stack on left side -->
+        <div id="book-thickness-left-id" class="book-thickness-left" [style.box-shadow]="leftThicknessShadow()" [style.width.px]="currentSheet() * 2"></div>
+        
+        <!-- Layered Page thickness stack on right side -->
+        <div id="book-thickness-right-id" class="book-thickness-right" [style.box-shadow]="rightThicknessShadow()" [style.width.px]="(totalSheets - currentSheet()) * 2"></div>
+
+        <!-- Hanging ribbon bookmarks (Top/Right edge) -->
+        <div id="ribbon-tabs-container-id" class="ribbon-tabs-container">
+          <button type="button" id="ribbon-tab-bio" class="ribbon-tab cursor-pointer border-0 text-white" style="--ribbon-color: #991b1b" (click)="goToSheet(2)">
+            <span>BIO</span>
+          </button>
+          <button type="button" id="ribbon-tab-skills" class="ribbon-tab cursor-pointer border-0 text-white" style="--ribbon-color: #d97706" (click)="goToSheet(3)">
+            <span>SKILLS</span>
+          </button>
+          <button type="button" id="ribbon-tab-experience" class="ribbon-tab cursor-pointer border-0 text-white" style="--ribbon-color: #b45309" (click)="goToSheet(3)">
+            <span>EXP</span>
+          </button>
+          <button type="button" id="ribbon-tab-projects" class="ribbon-tab cursor-pointer border-0 text-white" style="--ribbon-color: #047857" (click)="goToSheet(4)">
+            <span>WORK</span>
+          </button>
+          <button type="button" id="ribbon-tab-certs" class="ribbon-tab cursor-pointer border-0 text-white" style="--ribbon-color: #1d4ed8" (click)="goToSheet(6)">
+            <span>HONORS</span>
+          </button>
+          <button type="button" id="ribbon-tab-contact" class="ribbon-tab cursor-pointer border-0 text-white" style="--ribbon-color: #6b21a8" (click)="goToSheet(7)">
+            <span>CONTACT</span>
+          </button>
+        </div>
+
+        <!-- THE PHYSICAL 3D SHEETS -->
+        <!-- Sheet 0: Covers -->
+        <div id="sheet-0-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 0" [class.flipped-left]="currentSheet() > 0" [style.z-index]="flippingSheet() === 0 ? 100 : getSheetZIndex(0)">
+          
+          <!-- SHEET 0 FRONT: FRONT COVER -->
+          <div id="page-0-id" class="page-side cover-skin">
+            <div id="cover-inner-border-id" class="cover-inner-border"></div>
+            <div id="gc-tl-id" class="gold-corner top-left"></div>
+            <div id="gc-tr-id" class="gold-corner top-right"></div>
+            <div id="gc-bl-id" class="gold-corner bottom-left"></div>
+            <div id="gc-br-id" class="gold-corner bottom-right"></div>
+
+            <div id="cover-eyebrow-id" class="text-amber-400 font-mono text-xs tracking-[0.3em] uppercase mb-4 opacity-80">THE CHRONICLES OF CODE</div>
+            <h1 id="cover-title-id" class="font-serif text-4xl font-bold tracking-tight text-yellow-100 text-center uppercase leading-tight">Fathy Gendy</h1>
+            <div id="cover-sub-id" class="font-serif italic text-lg text-amber-200 mt-2 tracking-wide">Software Engineer</div>
+
+            <!-- Portrait Insert Medallion -->
+            <div id="cover-medallion-id" class="my-6 relative w-32 h-32 rounded-full border-4 border-yellow-500 overflow-hidden shadow-2xl bg-zinc-900 flex items-center justify-center">
+              <img id="cover-portrait-id" src="/Feto.jpeg" alt="Fathy Gendy" class="w-full h-full object-cover object-[center_15%]" referrerpolicy="no-referrer" />
+              <div id="medallion-glare-id" class="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-white/20 pointer-events-none"></div>
+            </div>
+
+            <p id="cover-location-id" class="font-mono text-[10px] tracking-[0.15em] uppercase text-amber-300/70 mb-4">Cairo, Egypt · Est. 2023</p>
+            
+            <button id="cover-open-btn-id" class="mt-2 px-5 py-2.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-stone-950 font-mono font-semibold text-xs tracking-wider uppercase transition shadow-lg hover:shadow-yellow-500/20 active:scale-95 cursor-pointer border-0" (click)="nextSheet()">
+              Open Journal
+            </button>
+          </div>
+
+          <!-- SHEET 0 BACK: INSIDE FRONT COVER -->
+          <div id="page-1-id" class="page-side back" style="background: radial-gradient(circle, #2d0e13 0%, #150406 100%);">
+            <div id="marbled-overlay-id" class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: repeating-radial-gradient(circle, #fbbf24 0, transparent 4px);"></div>
+            <div id="inside-cover-content-id" class="h-full flex flex-col items-center justify-center text-center p-6 border border-amber-500/20 m-4 rounded">
+              <h3 id="inside-title-id" class="font-serif text-yellow-100 text-xl font-bold uppercase tracking-widest">Ex Libris</h3>
+              <div id="inside-divider-id" class="w-12 h-[1px] bg-yellow-500/30 my-4"></div>
+              <p id="inside-text-id" class="font-serif italic text-amber-200/60 text-sm max-w-[26ch] leading-relaxed">
+                "Herein lies a testament to robust code, automated logic, and bridges built across the digital ether."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sheet 1: Title Page & TOC -->
+        <div id="sheet-1-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 1" [class.flipped-left]="currentSheet() > 1" [style.z-index]="flippingSheet() === 1 ? 100 : getSheetZIndex(1)">
+          
+          <!-- SHEET 1 FRONT: TITLE PAGE -->
+          <div id="page-2-id" class="page-side">
+            <div id="title-page-container-id" class="h-full flex flex-col justify-between items-center text-center py-4">
+              <div id="title-top-crest-id" class="text-amber-700/60 font-serif text-sm">✦ ✦ ✦</div>
+              
+              <div id="title-main-group-id" class="my-auto">
+                <h2 id="title-h2-id" class="font-serif text-2xl font-semibold tracking-tight text-stone-800 leading-tight">THE CHRONICLES OF SOFTWARE ENGINEERING</h2>
+                <div id="title-sub-id" class="text-stone-500 text-xs font-mono tracking-widest uppercase mt-3">Clean APIs · Automations · Full-Stack Craft</div>
+                
+                <div id="title-divider-id" class="w-20 h-[1px] bg-amber-800/20 my-6 mx-auto"></div>
+                
+                <p id="title-author-id" class="font-serif italic text-lg text-amber-900 font-medium">by Fathy Gendy</p>
+                <p id="title-role-id" class="text-stone-500 font-mono text-[10px] tracking-wider uppercase mt-1">Computer Science Student</p>
+              </div>
+
+              <div id="title-footer-id" class="text-stone-400 font-mono text-[9px] tracking-widest uppercase">Assiut National University · Assiut</div>
+            </div>
+          </div>
+
+          <!-- SHEET 1 BACK: TABLE OF CONTENTS -->
+          <div id="page-3-id" class="page-side back">
+            <h3 id="toc-header-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider border-b border-stone-200 pb-2 mb-4">Index of Records</h3>
+            
+            <div id="toc-list-id" class="flex flex-col gap-2.5 my-auto">
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-1-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(2)">
+                <span id="toc-lbl-1-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter I: The Author's Biography</span>
+                <span id="toc-dots-1-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-1-id" class="font-mono text-xs text-stone-400">Page 4</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-2-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(3)">
+                <span id="toc-lbl-2-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter II: Glossary of Skills</span>
+                <span id="toc-dots-2-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-2-id" class="font-mono text-xs text-stone-400">Page 5</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-exp-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(3)">
+                <span id="toc-lbl-exp-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter III: Chronology of Experience</span>
+                <span id="toc-dots-exp-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-exp-id" class="font-mono text-xs text-stone-400">Page 6</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-kindo-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(4)">
+                <span id="toc-lbl-kindo-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter IV: Masterwork I — Kindo</span>
+                <span id="toc-dots-kindo-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-kindo-id" class="font-mono text-xs text-stone-400">Page 7</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-nexly-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(4)">
+                <span id="toc-lbl-nexly-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter IV: Masterwork II — Nexly</span>
+                <span id="toc-dots-nexly-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-nexly-id" class="font-mono text-xs text-stone-400">Page 8</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-tongue-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(5)">
+                <span id="toc-lbl-tongue-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter IV: Masterwork III — TongueSpace</span>
+                <span id="toc-dots-tongue-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-tongue-id" class="font-mono text-xs text-stone-400">Page 9</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-tutor-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(5)">
+                <span id="toc-lbl-tutor-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter IV: Masterwork IV — Tech Tutor</span>
+                <span id="toc-dots-tutor-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-tutor-id" class="font-mono text-xs text-stone-400">Page 10</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-4-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(5)">
+                <span id="toc-lbl-4-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter V: Records of Distinction I</span>
+                <span id="toc-dots-4-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-4-id" class="font-mono text-xs text-stone-400">Page 11</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-4b-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(6)">
+                <span id="toc-lbl-4b-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter V: Records of Distinction II</span>
+                <span id="toc-dots-4b-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-4b-id" class="font-mono text-xs text-stone-400">Page 12</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-social-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(6)">
+                <span id="toc-lbl-social-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Chapter VI: Contact &amp; Socials</span>
+                <span id="toc-dots-social-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-social-id" class="font-mono text-xs text-stone-400">Page 13</span>
+              </button>
+
+              <!-- TOC Item -->
+              <button type="button" id="toc-item-5-id" class="flex justify-between items-baseline group cursor-pointer w-full text-left bg-transparent border-0 p-0" (click)="goToSheet(7)">
+                <span id="toc-lbl-5-id" class="font-serif text-stone-700 group-hover:text-amber-800 transition font-medium">Colophon</span>
+                <span id="toc-dots-5-id" class="flex-1 border-b border-dotted border-stone-300 mx-2"></span>
+                <span id="toc-num-5-id" class="font-mono text-xs text-stone-400">Page 14</span>
+              </button>
+            </div>
+
+            <div id="toc-foot-id" class="mt-auto text-center font-serif text-[10px] text-amber-900/40 italic">"Turn the leaf to proceed..."</div>
+          </div>
+        </div>
+
+        <!-- Sheet 2: Biography & Skills -->
+        <div id="sheet-2-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 2" [class.flipped-left]="currentSheet() > 2" [style.z-index]="flippingSheet() === 2 ? 100 : getSheetZIndex(2)">
+          
+          <!-- SHEET 2 FRONT: BIOGRAPHY -->
+          <div id="page-4-id" class="page-side">
+            <h3 id="bio-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter I</h3>
+            <h2 id="bio-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-4">The Author's Biography</h2>
+            
+            <div id="bio-body-id" class="text-stone-700 text-xs font-serif leading-relaxed space-y-3 overflow-y-auto max-h-[360px] pr-2">
+              <button type="button" id="bio-img-container-id" (click)="openLightbox('/F1.jpeg', 'Fathy Gendy', 'Standing proudly at Assiut University, Faculty of Computers and Information.')" class="float-right ml-4 mb-2 w-32 h-[170px] rounded border-2 border-amber-900/15 p-1 bg-amber-50/70 shadow-md rotate-[2deg] overflow-hidden relative group cursor-pointer hover:rotate-[0deg] hover:scale-105 active:scale-95 transition-all duration-300 block focus:outline-none focus:ring-1 focus:ring-amber-800">
+                <img id="bio-img-id" src="/F1.jpeg" alt="Fathy Gendy portrait" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-stone-900/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                  <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                </div>
+                <div class="absolute bottom-1.5 right-1.5 bg-amber-900/70 rounded-full w-5 h-5 flex items-center justify-center text-white/90 shadow">
+                  <mat-icon class="text-[12px] w-3.5 h-3.5 flex items-center justify-center font-bold">zoom_in</mat-icon>
+                </div>
+              </button>
+              <p id="bio-p1-id" class="text-justify">
+                <span id="bio-dropcap-id" class="float-left text-4xl font-serif font-bold text-amber-950 mr-2 mt-1 leading-[0.8]">B</span>ackend-focused Computer Science student specializing in .NET, web technologies, and AI automation. Experienced in building secure APIs and full-stack, database-driven applications using C#, ASP.NET Core, SQL Server, and Angular, while developing workflow automations with n8n and AI integrations.
+              </p>
+              <p id="bio-p2-id" class="text-justify">
+                Delivered projects with authentication, real-time features, clean architecture, and intelligent automation. Known for maintainable code, fast learning, and scalable software.
+              </p>
+              <p id="bio-p3-id" class="text-justify">
+                As a computer science student at Assiut National University, Fathy maintains a near-perfect CGPA of 3.9 / 4.0, blending rigorous academic theory with full-stack automated pipelines and active industry contributions.
+              </p>
+              <p id="bio-p4-id" class="text-stone-500 font-sans text-[10px] italic border-l border-amber-800/20 pl-3 py-1 mt-4">
+                "Fast-learning, meticulous, and dedicated to the craft of stable software systems."
+              </p>
+            </div>
+          </div>
+
+          <!-- SHEET 2 BACK: GLOSSARY OF SKILLS -->
+          <div id="page-5-id" class="page-side back">
+            <h3 id="skills-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter II</h3>
+            <h2 id="skills-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-4">Glossary of Skills</h2>
+            
+            <div id="skills-grid-id" class="flex flex-col text-xs font-serif overflow-y-auto max-h-[380px] pr-2 space-y-3">
+              
+              <!-- Skills section image -->
+              <div id="skills-illustration-container-id" class="w-full h-32 rounded border border-amber-900/15 overflow-hidden shadow-sm relative group bg-stone-50 p-1">
+                <img id="skills-banner-img-id" src="/skills_illustration.jpg" alt="Scientific Computing Illustration" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-x-1 bottom-1 bg-stone-900/70 py-1 px-2 text-center text-[8px] font-mono text-amber-100 uppercase tracking-widest rounded-b-xs">
+                  Codex of Technical Proficiencies &amp; Applied Sciences
+                </div>
+              </div>
+
+              <!-- Skill Box 1: Programming Languages -->
+              <div id="skill-box-1-id" class="p-2.5 border border-stone-300/40 rounded bg-stone-50/40 hover:bg-stone-50/60 transition duration-200">
+                <div id="skill-title-1-id" class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1.5 flex items-center gap-1.5">
+                  <mat-icon class="text-[11px] w-3.5 h-3.5 flex items-center justify-center">code</mat-icon>
+                  Programming Languages
+                </div>
+                <div id="skill-list-1-id" class="text-stone-700 font-serif leading-relaxed pl-5">
+                  Scratch, C, C++, C#, Java, Python, LaTeX, HTML, CSS, JavaScript, MATLAB, Lua
+                </div>
+              </div>
+
+              <!-- Skill Box 2: Frameworks -->
+              <div id="skill-box-2-id" class="p-2.5 border border-stone-300/40 rounded bg-stone-50/40 hover:bg-stone-50/60 transition duration-200">
+                <div id="skill-title-2-id" class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1.5 flex items-center gap-1.5">
+                  <mat-icon class="text-[11px] w-3.5 h-3.5 flex items-center justify-center">layers</mat-icon>
+                  Frameworks
+                </div>
+                <div id="skill-list-2-id" class="text-stone-700 font-serif leading-relaxed pl-5">
+                  n8n, .Net, Flask, Angular, React, Blazor
+                </div>
+              </div>
+
+              <!-- Skill Box 3: Database -->
+              <div id="skill-box-3-id" class="p-2.5 border border-stone-300/40 rounded bg-stone-50/40 hover:bg-stone-50/60 transition duration-200">
+                <div id="skill-title-3-id" class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1.5 flex items-center gap-1.5">
+                  <mat-icon class="text-[11px] w-3.5 h-3.5 flex items-center justify-center">storage</mat-icon>
+                  Database
+                </div>
+                <div id="skill-list-3-id" class="text-stone-700 font-serif leading-relaxed pl-5">
+                  Microsoft Access, MySQL, SQL Server, MongoDB, SQLite
+                </div>
+              </div>
+
+              <!-- Skill Box 4: Tools and Technologies -->
+              <div id="skill-box-4-id" class="p-2.5 border border-stone-300/40 rounded bg-stone-50/40 hover:bg-stone-50/60 transition duration-200">
+                <div id="skill-title-4-id" class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1.5 flex items-center gap-1.5">
+                  <mat-icon class="text-[11px] w-3.5 h-3.5 flex items-center justify-center">build</mat-icon>
+                  Tools and Technologies
+                </div>
+                <div id="skill-list-4-id" class="text-stone-700 font-serif leading-relaxed pl-5">
+                  Git, GitHub, Docker, CI/CD (GitHub Actions), JSON
+                </div>
+              </div>
+
+              <!-- Skill Box 5: Other -->
+              <div id="skill-box-5-id" class="p-2.5 border border-stone-300/40 rounded bg-stone-50/40 hover:bg-stone-50/60 transition duration-200">
+                <div id="skill-title-5-id" class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1.5 flex items-center gap-1.5">
+                  <mat-icon class="text-[11px] w-3.5 h-3.5 flex items-center justify-center">stars</mat-icon>
+                  Other Proficiencies
+                </div>
+                <div id="skill-list-5-id" class="text-stone-700 font-serif leading-relaxed pl-5">
+                  Object Oriented Programming, Data Structures, Algorithms, AI and Machine Learning, Problem Solving, Active Listening, Research, Time Management, Leadership, Critical Thinking, Arabic (Native), English (Fluent)
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Soft stamp element at bottom -->
+            <div id="skills-stamp-id" class="mt-auto pt-4 flex justify-end">
+              <div id="stamp-seal-id" class="border-2 border-dashed border-red-800/30 text-red-800/40 font-serif text-[8px] uppercase font-bold tracking-widest p-1.5 rotate-[-6deg] rounded-sm select-none">
+                VERIFIED TECH · 2026
+              </div>
+            </div>
+          </div>
+        </div>
+
+             <!-- Sheet 3: Experience & Projects I -->
+        <div id="sheet-3-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 3" [class.flipped-left]="currentSheet() > 3" [style.z-index]="flippingSheet() === 3 ? 100 : getSheetZIndex(3)">
+          
+          <!-- SHEET 3 FRONT: CHRONOLOGY OF EXPERIENCE (Page 6) -->
+          <div id="page-6-id" class="page-side">
+            <h3 id="exp-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter III</h3>
+            <h2 id="exp-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-4">Chronology of Experience</h2>
+            
+            <div id="exp-body-id" class="space-y-4 overflow-y-auto max-h-[380px] pr-2 text-xs font-serif leading-relaxed">
+              <!-- CIB Experience -->
+              <div id="exp-card-1-id" class="relative pl-6 border-l-2 border-amber-800/20 py-1">
+                <!-- Node icon -->
+                <div class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-amber-800 border-2 border-stone-50 flex items-center justify-center"></div>
+                
+                <div class="flex justify-between items-baseline mb-1 flex-wrap gap-x-2">
+                  <h4 id="exp-comp-1-id" class="font-bold text-stone-800 text-sm">Commercial International Bank (CIB), Egypt</h4>
+                  <span id="exp-date-1-id" class="font-mono text-[9px] text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-800/10 uppercase tracking-wider">August 2025</span>
+                </div>
+                <div class="font-sans font-medium text-stone-500 text-[10px] uppercase tracking-wide mb-2.5">Summer Intern · Backend &amp; Cybersecurity</div>
+                
+                <div class="flex gap-3 items-start">
+                  <p id="exp-desc-1-id" class="text-stone-700 text-justify mb-2 leading-relaxed flex-1">
+                    Facilitated banking digital transformation by developing backend APIs, implementing cybersecurity protocols, and leveraging agile methodologies for secure, cloud-based software delivery.
+                  </p>
+                  
+                  <!-- CIB Image Thumbnail -->
+                  <button type="button" (click)="openLightbox('/cib.jpeg', 'Commercial International Bank (CIB), Egypt', 'Summer Internship Program in Backend & Cybersecurity (August 2025) at Commercial International Bank.')" class="w-16 h-16 shrink-0 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm rotate-[-1deg] hover:rotate-[0deg] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer overflow-hidden relative group focus:outline-none">
+                    <img src="/cib.jpeg" alt="CIB internship" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                    <div class="absolute inset-0 bg-stone-900/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                      <mat-icon class="text-white text-xs w-4 h-4 flex items-center justify-center">zoom_in</mat-icon>
+                    </div>
+                  </button>
+                </div>
+                
+                <!-- Stack pill badges -->
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">REST APIs</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Cybersecurity</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Agile (Scrum)</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Cloud Security</span>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+          <!-- SHEET 3 BACK: MASTERWORKS I (Page 7) - KINDO -->
+          <div id="page-7-id" class="page-side back">
+            <h3 id="kindo-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter IV</h3>
+            <h2 id="kindo-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-3">Masterwork I — Kindo</h2>
+            
+            <div id="kindo-card-id" class="flex flex-col h-full justify-between">
+              <!-- Enlargeable Image Card -->
+              <button type="button" id="kindo-img-container-id" (click)="openLightbox('/kindo.jpeg', 'Kindo — Kindness Ripple Social Platform', 'Developed a kindness-sharing platform connecting users through ripple-linked posts across communities worldwide daily.')" class="w-full h-32 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01] mb-2.5">
+                <img id="kindo-img-id" src="/kindo.jpeg" alt="Kindo platform screenshot" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                  <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  <span class="text-white font-mono text-[9px] tracking-wider ml-1.5 uppercase font-bold">Enlarge Visual</span>
+                </div>
+              </button>
+
+              <div id="kindo-details-id" class="text-stone-700 text-[11px] font-serif leading-relaxed pr-1 mb-2">
+                <p class="font-semibold text-stone-800 mb-1">Kindness Ripple Social Platform (April 2026)</p>
+                <ul class="list-disc pl-4 space-y-1 text-justify">
+                  <li>Developed a kindness-sharing platform connecting users through ripple-linked posts across communities worldwide daily.</li>
+                  <li>Built core social features enabling users to post Kindos, react, comment, follow, save, and chat live securely together.</li>
+                  <li>Implemented Identity authentication, challenge flows, Hangfire badge jobs, & moderation reporting pipeline end-to-end.</li>
+                </ul>
+              </div>
+
+              <!-- Tech Stack Section -->
+              <div class="mb-3">
+                <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Tech Stack</div>
+                <div class="flex flex-wrap gap-1">
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET Core MVC</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">EF Core</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SignalR</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Hangfire</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SQL Server</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Razor Views</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">D3.js</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Leaflet.js</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">JavaScript</span>
+                </div>
+              </div>
+
+              <!-- GitHub Link & Footer -->
+              <div class="mt-auto pt-2 border-t border-stone-200/60 flex justify-between items-center">
+                <div class="flex gap-1.5">
+                  <a href="https://github.com/Fetoooo/Kindo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>GitHub</span>
+                  </a>
+                  <a href="https://kindo.runasp.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <mat-icon class="text-[14px] w-[14px] h-[14px] leading-none">open_in_new</mat-icon>
+                    <span>Live Demo</span>
+                  </a>
+                </div>
+                <span class="text-stone-400 font-mono text-[9px]">Page 7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sheet 4: Selected Masterworks II & III -->
+        <div id="sheet-4-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 4" [class.flipped-left]="currentSheet() > 4" [style.z-index]="flippingSheet() === 4 ? 100 : getSheetZIndex(4)">
+          
+          <!-- SHEET 4 FRONT: MASTERWORK II — NEXLY (Page 8) -->
+          <div id="page-8-id" class="page-side">
+            <h3 id="nexly-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter IV</h3>
+            <h2 id="nexly-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-3">Masterwork II — Nexly</h2>
+            
+            <div id="nexly-card-id" class="flex flex-col h-full justify-between">
+              <!-- Enlargeable Image Card -->
+              <button type="button" id="nexly-img-container-id" (click)="openLightbox('/nexly.jpeg', 'Nexly — Neighborhood Skill-Sharing Platform', 'Developed a skill-sharing marketplace connecting service providers with local customers for various categories.')" class="w-full h-[115px] rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01] mb-2.5">
+                <img id="nexly-img-id" src="/nexly.jpeg" alt="Nexly platform screenshot" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                  <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  <span class="text-white font-mono text-[9px] tracking-wider ml-1.5 uppercase font-bold">Enlarge Visual</span>
+                </div>
+              </button>
+
+              <div id="nexly-details-id" class="text-stone-700 text-[11px] font-serif leading-relaxed pr-1 mb-2">
+                <p class="font-semibold text-stone-800 mb-1">Skill-Sharing Marketplace (January 2026)</p>
+                <ul class="list-disc pl-4 space-y-1 text-justify">
+                  <li>Engineered a high-performance, dual-sided marketplace to match service providers with local clients seamlessly.</li>
+                  <li>Powered by ASP.NET Core Web API and React, featuring secure Stripe payments, appointment bookings, and live messaging.</li>
+                  <li>Integrated an intelligent, AI-powered conversational coordinator "Nexy" to facilitate optimal skill pairings and bookings.</li>
+                </ul>
+              </div>
+
+              <!-- Tech Stack Section -->
+              <div class="mb-3">
+                <div class="font-mono text-[8px] tracking-wider uppercase text-amber-950 font-bold mb-1">Applied Tech Stack</div>
+                <div class="flex flex-wrap gap-1">
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">React</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">TypeScript</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET Core Web API</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SQL Server</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Stripe API</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Cloudinary</span>
+                </div>
+              </div>
+
+              <div class="mt-auto pt-2 border-t border-stone-200/60 flex justify-between items-center">
+                <div class="flex gap-1.5">
+                  <a href="https://github.com/Fetoooo/Nexly" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>GitHub</span>
+                  </a>
+                  <a href="https://nexly.runasp.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <mat-icon class="text-[14px] w-[14px] h-[14px] leading-none">open_in_new</mat-icon>
+                    <span>Live Demo</span>
+                  </a>
+                </div>
+                <span class="text-stone-400 font-mono text-[9px]">Page 8</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SHEET 4 BACK: MASTERWORK III — TONGUESPACE (Page 9) -->
+          <div id="page-9-id" class="page-side back">
+            <h3 id="tongue-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter IV</h3>
+            <h2 id="tongue-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-3">Masterwork III — TongueSpace</h2>
+            
+            <div id="tongue-card-id" class="flex flex-col h-full justify-between">
+              <!-- Enlargeable Image Card -->
+              <button type="button" id="tongue-img-container-id" (click)="openLightbox('/tonguespace.jpeg', 'TongueSpace — Language Learning Platform', 'Developed a comprehensive language learning platform offering courses in Arabic, English, French, German, and Spanish.')" class="w-full h-[115px] rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01] mb-2.5">
+                <img id="tongue-img-id" src="/tonguespace.jpeg" alt="TongueSpace platform screenshot" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                  <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  <span class="text-white font-mono text-[9px] tracking-wider ml-1.5 uppercase font-bold">Enlarge Visual</span>
+                </div>
+              </button>
+
+              <div id="tongue-details-id" class="text-stone-700 text-[11px] font-serif leading-relaxed pr-1 mb-2">
+                <p class="font-semibold text-stone-800 mb-1">Language Learning Platform (August 2025)</p>
+                <ul class="list-disc pl-4 space-y-1 text-justify">
+                  <li>Developed a comprehensive language learning platform offering courses in Arabic, English, French, German, and Spanish.</li>
+                  <li>Built a dual-sided marketplace enabling learners to enroll in courses &amp; instructors to create &amp; manage their own content.</li>
+                  <li>Implemented user authentication, role-based access control, and progress tracking with a wonderful certificate generation.</li>
+                </ul>
+              </div>
+
+              <!-- Tech Stack Section -->
+              <div class="mb-3">
+                <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Tech Stack</div>
+                <div class="flex flex-wrap gap-1">
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET Core Web API</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">EF Core</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET Core Identity</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">React/Blazor</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SQL Server</span>
+                </div>
+              </div>
+
+              <div class="mt-auto pt-2 border-t border-stone-200/60 flex justify-between items-center">
+                <div class="flex gap-1.5">
+                  <a href="https://github.com/Fetoooo/TongueSpace" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>GitHub</span>
+                  </a>
+                  <a href="https://tonguespace.runasp.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <mat-icon class="text-[14px] w-[14px] h-[14px] leading-none">open_in_new</mat-icon>
+                    <span>Live Demo</span>
+                  </a>
+                </div>
+                <span class="text-stone-400 font-mono text-[9px]">Page 9</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sheet 5: Selected Masterworks IV & Honors -->
+        <div id="sheet-5-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 5" [class.flipped-left]="currentSheet() > 5" [style.z-index]="flippingSheet() === 5 ? 100 : getSheetZIndex(5)">
+          
+          <!-- SHEET 5 FRONT: MASTERWORK IV — TECH TUTOR (Page 10) -->
+          <div id="page-10-id" class="page-side">
+            <h3 id="tutor-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter IV</h3>
+            <h2 id="tutor-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-3">Masterwork IV — Tech Tutor</h2>
+            
+            <div id="tutor-card-id" class="flex flex-col h-full justify-between">
+              <!-- Enlargeable Image Card -->
+              <button type="button" id="tutor-img-container-id" (click)="openLightbox('/youtube.jpeg', 'Masterwork IV — Tech Tutor', 'CS Education & Community Mentoring')" class="w-full h-[115px] rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01] mb-2.5">
+                <img id="tutor-img-id" src="/youtube.jpeg" alt="Tech Tutor YouTube channel" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                  <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  <span class="text-white font-mono text-[9px] tracking-wider ml-1.5 uppercase font-bold">Enlarge Visual</span>
+                </div>
+              </button>
+
+              <div id="tape-visual-id" class="mb-2 p-2 rounded bg-amber-900/10 border border-amber-800/20 flex items-center justify-between">
+                <span id="tape-stat-id" class="text-stone-700 font-mono text-[9px] flex items-center gap-1.5 font-bold">
+                  <mat-icon id="play-arrow-icon" class="text-red-600">play_arrow</mat-icon> 25+ Educational Videos
+                </span>
+                <span id="tape-views-id" class="font-mono text-[9px] text-stone-600 font-bold bg-amber-200/50 px-2 py-0.5 rounded border border-amber-800/20">19,000+ VIEWS</span>
+              </div>
+
+              <div id="tutor-details-id" class="text-stone-700 text-[11px] font-serif leading-relaxed pr-1 mb-2">
+                <p class="font-semibold text-stone-800 mb-1">CS Education &amp; Community Mentoring</p>
+                <ul class="list-disc pl-4 space-y-1 text-justify">
+                  <li>Proactively simplified complex Computer Science topics via a dedicated YouTube channel "Tech Tutor" with 19K+ organic views.</li>
+                  <li>Personally tutored over 1,000+ peers in practical software labs and database administration assignments.</li>
+                  <li>Coached and mentored local youth scout divisions to successfully acquire specialized Programmer Badges.</li>
+                </ul>
+              </div>
+
+              <!-- Tech Stack Section -->
+              <div class="mb-3">
+                <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Domains</div>
+                <div class="flex flex-wrap gap-1">
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Video Production</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Peer Tutoring</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Scout Mentorship</span>
+                  <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">CS Curriculum Simplification</span>
+                </div>
+              </div>
+
+              <div class="mt-auto pt-2 border-t border-stone-200/60 flex justify-between items-center">
+                <a href="https://www.youtube.com/@FathyAyman-h7r" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                  <svg class="w-3.5 h-3.5 fill-current text-red-600" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  <span>@FathyAyman-h7r</span>
+                </a>
+                <span class="text-stone-400 font-mono text-[9px]">Page 10</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SHEET 5 BACK: HONORS I (Page 11) -->
+          <div id="page-11-id" class="page-side back relative">
+            <h3 id="honors-1-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter V</h3>
+            <h2 id="honors-1-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-4">Records of Distinction (I)</h2>
+            
+            <div id="honors-1-body-id" class="space-y-4 pr-2">
+              <button type="button" id="hackathon-img-container-id" (click)="openLightbox('/hackthon.jpeg', 'Techora ICT Campus 2026 Hackathon', 'Ranked amongst the Top 15 finalists out of 70+ elite teams')" class="w-full h-48 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01] mb-4">
+                <img id="hackathon-img-id" src="/hackthon.jpeg" alt="Hackathon Team" class="w-full h-full object-cover object-center rounded-xs" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                  <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  <span class="text-white font-mono text-[9px] tracking-wider ml-1.5 uppercase font-bold">Enlarge Visual</span>
+                </div>
+              </button>
+
+              <!-- Honor Card -->
+              <div id="honor-1-id" class="flex gap-3 items-start pb-3">
+                <div id="honor-icon-1-id" class="p-2 bg-yellow-100 rounded text-yellow-800">
+                  <mat-icon id="emoji-events-icon">emoji_events</mat-icon>
+                </div>
+                <div id="honor-text-1-id" class="text-xs font-serif leading-relaxed">
+                  <h4 id="honor-title-text-1-id" class="font-bold text-stone-800">Techora ICT Campus 2026 Hackathon</h4>
+                  <p id="honor-desc-1-id" class="text-stone-600 mb-2.5">
+                    Ranked amongst the <strong>Top 15 finalists out of 70+ elite teams</strong> for the design, development, and pitching of "EcoCash" — a technology-driven, intelligent recycling architecture.
+                  </p>
+                  <a href="https://www.linkedin.com/posts/fathy-gendy-872258285_ecocash-hackathon-gdg-ugcPost-7473363569804259329-1ehC/?utm_source=share&utm_medium=member_android&rcm=ACoAAEVFN9YBS9qTarTlsDkQ5g5nu2quP3IB48s" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 transition text-[9px] font-mono no-underline border border-blue-200 rounded px-2 py-0.5 bg-blue-50">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    <span>View LinkedIn Post</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-auto pt-2 flex justify-end absolute bottom-6 right-6">
+              <span class="text-stone-400 font-mono text-[9px]">Page 11</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sheet 6: Honors II & Contact Channels -->
+        <div id="sheet-6-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 6" [class.flipped-left]="currentSheet() > 6" [style.z-index]="flippingSheet() === 6 ? 100 : getSheetZIndex(6)">
+          
+          <!-- SHEET 6 FRONT: HONORS II (Page 12) -->
+          <div id="page-12-id" class="page-side relative">
+            <h3 id="honors-2-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter V</h3>
+            <h2 id="honors-2-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-4">Records of Distinction (II)</h2>
+            
+            <div id="honors-2-body-id" class="space-y-4 overflow-y-auto max-h-[380px] pr-2">
+              <div class="flex gap-2 mb-4">
+                <button type="button" (click)="openLightbox('/s1.jpeg', 'Sawiris Linkage Scholar', 'Awarded a highly competitive fully funded scholarship')" class="flex-1 h-[140px] rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01]">
+                  <img src="/s1.jpeg" alt="Sawiris Scholar 1" class="w-full h-full object-cover object-top rounded-xs" referrerpolicy="no-referrer" />
+                  <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                    <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  </div>
+                </button>
+                <button type="button" (click)="openLightbox('/s2.jpeg', 'Sawiris Linkage Scholar', 'Awarded a highly competitive fully funded scholarship')" class="flex-1 h-[140px] rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01]">
+                  <img src="/s2.jpeg" alt="Sawiris Scholar 2" class="w-full h-full object-cover object-top rounded-xs" referrerpolicy="no-referrer" />
+                  <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                    <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Honor Card -->
+              <div id="honor-2-id" class="flex gap-3 items-start pb-3">
+                <div id="honor-icon-2-id" class="p-2 bg-blue-100 rounded text-blue-800">
+                  <mat-icon id="school-icon">school</mat-icon>
+                </div>
+                <div id="honor-text-2-id" class="text-xs font-serif leading-relaxed">
+                  <h4 id="honor-title-text-2-id" class="font-bold text-stone-800">Sawiris Linkage Scholar</h4>
+                  <p id="honor-desc-2-id" class="text-stone-600 mb-1.5">
+                    Awarded a highly competitive fully funded scholarship by the Sawiris Foundation-Amideast; one of only 45 exceptional students selected across Upper Egypt.
+                  </p>
+                  <p id="honor-meta-2-id" class="text-stone-500 font-mono text-[9px] italic mb-2">
+                    TOEFL speaking fluency: C2 Level · US University acceptances (Miami, Ohio, Indiana State).
+                  </p>
+                  <a href="https://www.linkedin.com/posts/fathy-gendy-872258285_i-cannot-believe-that-i-finally-graduated-activity-7109505696068435968-T70c?utm_source=share&utm_medium=member_android&rcm=ACoAAEVFN9YBS9qTarTlsDkQ5g5nu2quP3IB48s" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 transition text-[9px] font-mono no-underline border border-blue-200 rounded px-2 py-0.5 bg-blue-50">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    <span>View LinkedIn Post</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-auto pt-2 flex justify-start absolute bottom-6 left-6">
+              <span class="text-stone-400 font-mono text-[9px]">Page 12</span>
+            </div>
+          </div>
+          
+          <!-- SHEET 6 BACK: CONTACT CHANNELS (Page 13) -->
+          <div id="page-13-id" class="page-side back relative">
+            <h3 id="social-header-id" class="text-amber-800 font-mono text-[9px] tracking-widest uppercase mb-1">Chapter VI</h3>
+            <h2 id="social-title-id" class="font-serif text-stone-800 text-lg font-bold uppercase tracking-wider mb-4">Contact Directory</h2>
+            
+            <div id="social-directory-id" class="space-y-3.5 overflow-y-auto max-h-[380px] pr-2">
+              <!-- Contact Card: Email -->
+              <a href="mailto:fathy.gendy.slp&#64;gmail.com" id="social-card-mail" class="flex gap-3.5 items-start p-2.5 rounded border border-stone-300/40 bg-stone-50/20 hover:bg-amber-50/30 hover:border-amber-800/20 transition group no-underline text-stone-800 cursor-pointer">
+                <div class="p-2 bg-amber-100 text-amber-800 rounded group-hover:scale-110 transition duration-300 flex items-center justify-center">
+                  <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">mail</mat-icon>
+                </div>
+                <div class="text-xs font-serif flex-1 leading-normal">
+                  <h4 class="font-bold text-stone-800 font-serif text-[11px] uppercase tracking-wider text-amber-950 group-hover:text-amber-800 transition">Electronic Mail</h4>
+                  <p class="font-mono text-stone-700 text-[10px] mt-0.5">fathy.gendy.slp&#64;gmail.com</p>
+                  <p class="text-stone-500 text-[10px] mt-1 font-serif leading-relaxed">Direct channel for project proposals, hiring inquiries, or architectural discussions.</p>
+                </div>
+              </a>
+
+              <!-- Contact Card: Phone -->
+              <div id="social-card-phone" class="flex gap-3.5 items-start p-2.5 rounded border border-stone-300/40 bg-stone-50/20 text-stone-800">
+                <div class="p-2 bg-emerald-100 text-emerald-800 rounded flex items-center justify-center">
+                  <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">phone</mat-icon>
+                </div>
+                <div class="text-xs font-serif flex-1 leading-normal">
+                  <h4 class="font-bold text-stone-800 font-serif text-[11px] uppercase tracking-wider text-emerald-950">Direct Telephone</h4>
+                  <p class="font-mono text-stone-700 text-[10px] mt-0.5">+201093790392</p>
+                  <p class="text-stone-500 text-[10px] mt-1 font-serif leading-relaxed">Direct connection line for secure calls, Telegram chats, and real-time coordination.</p>
+                </div>
+              </div>
+
+              <!-- Contact Card: LinkedIn -->
+              <a href="https://www.linkedin.com/in/fathy-gendy-872258285/" target="_blank" rel="noopener noreferrer" id="social-card-linkedin" class="flex gap-3.5 items-start p-2.5 rounded border border-stone-300/40 bg-stone-50/20 hover:bg-blue-50/30 hover:border-blue-800/20 transition group no-underline text-stone-800 cursor-pointer">
+                <div class="p-2 bg-blue-100 text-blue-800 rounded group-hover:scale-110 transition duration-300 flex items-center justify-center">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </div>
+                <div class="text-xs font-serif flex-1 leading-normal">
+                  <h4 class="font-bold text-stone-800 font-serif text-[11px] uppercase tracking-wider text-blue-950 group-hover:text-amber-800 transition">LinkedIn Professional Network</h4>
+                  <p class="font-mono text-stone-700 text-[10px] mt-0.5">linkedin.com/in/fathy-gendy</p>
+                  <p class="text-stone-500 text-[10px] mt-1 font-serif leading-relaxed">Connect for professional endorsements, industry updates, and formal networks.</p>
+                </div>
+              </a>
+
+              <!-- Contact Card: GitHub -->
+              <a href="https://github.com/Fetoooo" target="_blank" rel="noopener noreferrer" id="social-card-github" class="flex gap-3.5 items-start p-2.5 rounded border border-stone-300/40 bg-stone-50/20 hover:bg-stone-100/30 hover:border-stone-800/20 transition group no-underline text-stone-800 cursor-pointer">
+                <div class="p-2 bg-stone-200 text-stone-800 rounded group-hover:scale-110 transition duration-300 flex items-center justify-center">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </div>
+                <div class="text-xs font-serif flex-1 leading-normal">
+                  <h4 class="font-bold text-stone-800 font-serif text-[11px] uppercase tracking-wider text-stone-950 group-hover:text-stone-800 transition">GitHub Software Repository</h4>
+                  <p class="font-mono text-stone-700 text-[10px] mt-0.5">github.com/Fetoooo</p>
+                  <p class="text-stone-500 text-[10px] mt-1 font-serif leading-relaxed">Source code archives, active automations, open source contributions, and backend grimoires.</p>
+                </div>
+              </a>
+            </div>
+            
+            <div class="mt-auto pt-2 flex justify-end absolute bottom-6 right-6">
+              <span class="text-stone-400 font-mono text-[9px]">Page 13</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sheet 7: Colophon & The End -->
+        <div id="sheet-7-id" class="book-page-sheet" [class.is-flipping]="flippingSheet() === 7" [class.flipped-left]="currentSheet() > 7" [style.z-index]="flippingSheet() === 7 ? 100 : getSheetZIndex(7)">
+          
+          <!-- SHEET 7 FRONT: COLOPHON & THE END (Page 14) -->
+          <div id="page-14-id" class="page-side relative">
+            <div id="colophon-inside-content-id" class="h-full flex flex-col items-center justify-center text-center p-6 border border-amber-800/10 m-4 rounded relative">
+              <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: repeating-radial-gradient(circle, #78350f 0, transparent 8px);"></div>
+              
+              <h3 id="back-inside-title-id" class="font-serif text-stone-800 text-xl font-semibold uppercase tracking-[0.3em] mb-2">The End</h3>
+              <p id="colophon-text-id-2" class="font-serif italic text-stone-600/70 text-[10px] tracking-wider mb-6">Finis</p>
+              
+              <div id="colophon-divider-id" class="w-10 h-[1px] bg-amber-800/20 mb-6"></div>
+              
+              <h3 id="colophon-title-id" class="font-serif text-amber-800 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Colophon</h3>
+              <p id="colophon-text-id" class="font-serif italic text-stone-600 text-[10px] max-w-[24ch] leading-relaxed mb-6">
+                Handcrafted in Zoneless Angular, typeset in Inter &amp; JetBrains Mono, and deployed on Vercel.
+              </p>
+
+              <button id="desktop-close-btn-id" class="px-4 py-1.5 border border-amber-800/30 hover:bg-amber-800/5 rounded-full text-stone-700 hover:text-stone-900 font-mono text-[9px] tracking-widest uppercase transition active:scale-95 cursor-pointer bg-transparent flex items-center justify-center gap-1.5 mt-4" (click)="closeJournal()">
+                Close Journal <mat-icon class="text-xs">arrow_forward</mat-icon>
+              </button>
+            </div>
+               
+            <div class="mt-auto pt-2 flex justify-start absolute bottom-6 left-6">
+              <span class="text-stone-400 font-mono text-[9px]">Page 14</span>
+            </div>
+          </div>
+             
+          <!-- SHEET 7 BACK: BACK COVER (Page 15) -->
+          <div id="page-15-id" class="page-side back cover-skin">
+            <div id="back-cover-inner-border-id" class="cover-inner-border"></div>
+            <div id="back-gc-tl-id" class="gold-corner top-left"></div>
+            <div id="back-gc-tr-id" class="gold-corner top-right"></div>
+            <div id="back-gc-bl-id" class="gold-corner bottom-left"></div>
+            <div id="back-gc-br-id" class="gold-corner bottom-right"></div>
+
+            <div id="back-seal-box-id" class="border-2 border-yellow-500/30 p-4 rounded flex flex-col items-center relative z-10">
+              <div id="back-crest-id" class="text-yellow-500 text-3xl font-serif mb-2">☬</div>
+              <div id="back-brand-id" class="font-serif text-sm tracking-[0.2em] uppercase text-yellow-200 font-bold">FATHY GENDY</div>
+              <div id="back-tag-id" class="font-mono text-[8px] text-amber-300/60 tracking-wider uppercase mt-1">Software Engineer · Cairo</div>
+            </div>
+               
+            <button id="back-cover-btn-id" class="mt-8 px-4 py-2 border border-yellow-500/40 hover:bg-yellow-500/10 rounded-full text-yellow-200 font-mono text-[9px] tracking-widest uppercase transition active:scale-95 cursor-pointer bg-transparent flex items-center justify-center gap-1.5 relative z-10" (click)="closeJournal()">
+              Go to Front Cover <mat-icon class="text-xs">arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    } @else {
+      <!-- MOBILE VIEWPORT (SINGLE PAGE ADAPTIVE JOURNAL CARD) -->
+      <div id="mobile-journal-id" class="w-full h-full relative overflow-hidden flex flex-col rounded-xl border shadow-2xl transition-all duration-500"
+           [style.background]="(currentPage() === 0 || currentPage() === 15) ? 'radial-gradient(circle at 30% 30%, #521319 0%, #2e080b 100%)' : (currentPage() === 1) ? 'radial-gradient(circle, #2d0e13 0%, #150406 100%)' : '#fdfaf2'"
+           [style.border-color]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? 'rgba(251, 191, 36, 0.25)' : 'rgba(180, 83, 9, 0.2)'"
+           [style.color]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? '#fef08a' : '#292524'"
+           style="perspective: 1200px;">
+        
+        <!-- Subtle paper grid overlay -->
+        <div id="mobile-paper-overlay-id" class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: repeating-linear-gradient(90deg, #000 0px, transparent 1px, transparent 4px), repeating-linear-gradient(0deg, #000 0px, transparent 1px, transparent 4px);"></div>
+
+        <!-- MOBILE SHEET CONTENT RENDERING BASED ON currentPage() WITH 3D FLIP -->
+        <div id="mobile-page-content-id" class="flex-1 p-6 flex flex-col justify-between overflow-y-auto relative z-10 transition-all"
+             [class.flipping-next]="mobileFlipClass() === 'flipping-next'"
+             [class.flipping-prev]="mobileFlipClass() === 'flipping-prev'"
+             style="transform-style: preserve-3d; backface-visibility: hidden;">
+          
+          <!-- Page 0: Mobile Front Cover -->
+          @if (currentPage() === 0) {
+            <div id="m-cov-id" class="flex flex-col items-center justify-center text-center h-full py-8 space-y-6 relative w-full">
+              <div class="cover-inner-border"></div>
+              <div class="gold-corner top-left"></div>
+              <div class="gold-corner top-right"></div>
+              <div class="gold-corner bottom-left"></div>
+              <div class="gold-corner bottom-right"></div>
+
+              <div id="m-cov-eyebrow-id" class="text-amber-400 font-mono text-[10px] tracking-[0.25em] uppercase mb-1 opacity-85 z-10">THE CHRONICLES OF CODE</div>
+              
+              <h1 id="m-cov-title-id" class="font-serif text-3xl font-bold tracking-tight text-yellow-100 uppercase leading-tight z-10">Fathy Gendy</h1>
+              <div id="m-cov-sub-id" class="font-serif italic text-amber-200 text-base z-10">Software Engineer</div>
+
+              <div id="m-cov-port-box-id" class="relative w-28 h-28 rounded-full border-4 border-yellow-500 overflow-hidden shadow-2xl bg-zinc-900 flex items-center justify-center z-10">
+                <img id="m-cov-portrait-id" src="/Feto.jpeg" alt="Fathy Gendy" class="w-full h-full object-cover object-[center_15%]" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-white/20 pointer-events-none"></div>
+              </div>
+
+              <div id="m-cov-loc-id" class="text-amber-300/70 font-mono text-[9px] tracking-wider uppercase z-10">Cairo, Egypt · Est. 2023</div>
+              
+              <button id="m-cov-btn-id" class="px-6 py-2.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-stone-950 font-mono font-semibold text-xs uppercase tracking-wider transition shadow-lg active:scale-95 cursor-pointer border-0 z-10" (click)="nextPage()">
+                Open Portfolio
+              </button>
+            </div>
+          }
+
+          <!-- Page 1: Inside Cover -->
+          @if (currentPage() === 1) {
+            <div id="m-incov-id" class="flex flex-col items-center justify-center text-center h-full py-12 space-y-4">
+              <div id="m-marbled-overlay-id" class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: repeating-radial-gradient(circle, #fbbf24 0, transparent 4px);"></div>
+              <h3 id="m-incov-lbl-id" class="font-serif text-yellow-100 text-lg font-bold uppercase tracking-widest z-10">Ex Libris</h3>
+              <div id="m-incov-div-id" class="w-10 h-[1px] bg-yellow-500/30 z-10"></div>
+              <p id="m-incov-text-id" class="font-serif italic text-amber-200/60 text-xs max-w-[24ch] leading-relaxed z-10">
+                "Herein lies a testament to robust code, automated logic, and bridges built across the digital ether."
+              </p>
+              <button type="button" id="m-incov-btn-id" class="text-xs font-mono font-bold text-amber-400 mt-6 bg-transparent border-0 cursor-pointer z-10 hover:text-amber-300" (click)="nextPage()">Proceed to Index →</button>
+            </div>
+          }
+
+          <!-- Page 2: Title Page -->
+          @if (currentPage() === 2) {
+            <div id="m-tit-id" class="flex flex-col justify-between items-center text-center h-full py-8">
+              <div id="m-tit-crest-id" class="text-amber-800/50">✦ ✦ ✦</div>
+              <div id="m-tit-group-id" class="my-auto space-y-4">
+                <h2 id="m-tit-h2-id" class="font-serif text-xl font-bold tracking-tight text-stone-800 leading-tight">THE CHRONICLES OF SOFTWARE ENGINEERING</h2>
+                <div id="m-tit-divider-id" class="w-12 h-[1px] bg-amber-800/20 mx-auto"></div>
+                <p id="m-tit-author-id" class="font-serif italic text-base text-amber-950 font-medium">by Fathy Gendy</p>
+                <p id="m-tit-role-id" class="text-stone-500 font-mono text-[9px] uppercase tracking-wider">Assiut National University</p>
+              </div>
+              <div id="m-tit-foot-id" class="text-stone-400 font-mono text-[8px] tracking-widest">Assiut, Anno 2026</div>
+            </div>
+          }
+
+          <!-- Page 3: Table of Contents -->
+          @if (currentPage() === 3) {
+            <div id="m-toc-id" class="flex flex-col h-full py-2">
+              <h3 id="m-toc-lbl-id" class="font-serif text-stone-800 text-sm font-bold uppercase tracking-wider border-b border-stone-200 pb-1.5 mb-2">Index of Chapters</h3>
+              <div id="m-toc-list-id" class="flex flex-col gap-1.5 my-auto overflow-y-auto max-h-[360px] pr-1">
+                <button type="button" id="m-toc-1-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(4)">
+                  <span id="m-toc-lbl-1-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter I: Biography</span>
+                  <span id="m-toc-num-1-id" class="font-mono text-[8px] text-stone-400">Page 4</span>
+                </button>
+                <button type="button" id="m-toc-2-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(5)">
+                  <span id="m-toc-lbl-2-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter II: Skills Glossary</span>
+                  <span id="m-toc-num-2-id" class="font-mono text-[8px] text-stone-400">Page 5</span>
+                </button>
+                <button type="button" id="m-toc-3-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(6)">
+                  <span id="m-toc-lbl-3-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter III: Experience Chronology</span>
+                  <span id="m-toc-num-3-id" class="font-mono text-[8px] text-stone-400">Page 6</span>
+                </button>
+                <button type="button" id="m-toc-4-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(7)">
+                  <span id="m-toc-lbl-4-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter IV: Masterwork I (Kindo)</span>
+                  <span id="m-toc-num-4-id" class="font-mono text-[8px] text-stone-400">Page 7</span>
+                </button>
+                <button type="button" id="m-toc-5-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(8)">
+                  <span id="m-toc-lbl-5-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter IV: Masterwork II (Nexly)</span>
+                  <span id="m-toc-num-5-id" class="font-mono text-[8px] text-stone-400">Page 8</span>
+                </button>
+                <button type="button" id="m-toc-5b-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(9)">
+                  <span id="m-toc-lbl-5b-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter IV: Masterwork III (TongueSpace)</span>
+                  <span id="m-toc-num-5b-id" class="font-mono text-[8px] text-stone-400">Page 9</span>
+                </button>
+                <button type="button" id="m-toc-5c-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(10)">
+                  <span id="m-toc-lbl-5c-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter IV: Masterwork IV (Tech Tutor)</span>
+                  <span id="m-toc-num-5c-id" class="font-mono text-[8px] text-stone-400">Page 10</span>
+                </button>
+                <button type="button" id="m-toc-6-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(11)">
+                  <span id="m-toc-lbl-6-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter V: Distinction Records (I)</span>
+                  <span id="m-toc-num-6-id" class="font-mono text-[8px] text-stone-400">Page 11</span>
+                </button>
+                <button type="button" id="m-toc-6b-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(12)">
+                  <span id="m-toc-lbl-6b-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter V: Distinction Records (II)</span>
+                  <span id="m-toc-num-6b-id" class="font-mono text-[8px] text-stone-400">Page 12</span>
+                </button>
+                <button type="button" id="m-toc-7-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(13)">
+                  <span id="m-toc-lbl-7-id" class="font-serif text-[10px] text-stone-700 font-medium">Chapter VI: Contact Directory</span>
+                  <span id="m-toc-num-7-id" class="font-mono text-[8px] text-stone-400">Page 13</span>
+                </button>
+                <button type="button" id="m-toc-8-id" class="flex justify-between items-baseline bg-transparent border-0 p-0 cursor-pointer w-full text-left" (click)="goToPage(14)">
+                  <span id="m-toc-lbl-8-id" class="font-serif text-[10px] text-stone-700 font-medium">Colophon</span>
+                  <span id="m-toc-num-8-id" class="font-mono text-[8px] text-stone-400">Page 14</span>
+                </button>
+              </div>
+              <div id="m-toc-foot-id" class="mt-auto text-center font-serif text-[9px] text-stone-400 italic">"Tap on any page to flip..."</div>
+            </div>
+          }
+
+          <!-- Page 4: Biography -->
+          @if (currentPage() === 4) {
+            <div id="m-bio-id" class="flex flex-col h-full py-2">
+              <h3 id="m-bio-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter I</h3>
+              <h2 id="m-bio-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-3">The Biography</h2>
+              <div id="m-bio-text-id" class="text-stone-700 text-xs font-serif leading-relaxed space-y-2.5 overflow-y-auto max-h-[340px] pr-1">
+                <button type="button" id="m-bio-img-container-id" (click)="openLightbox('/F1.jpeg', 'Fathy Gendy', 'Standing proudly at Assiut University, Faculty of Computers and Information.')" class="float-right ml-3 mb-2 w-24 h-32 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-md rotate-[1.5deg] overflow-hidden relative group cursor-pointer hover:rotate-[0deg] active:scale-95 transition-all duration-300 block focus:outline-none">
+                  <img id="m-bio-img-id" src="/F1.jpeg" alt="Fathy Gendy portrait" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                  <div class="absolute bottom-1 right-1 bg-amber-900/70 rounded-full w-4 h-4 flex items-center justify-center text-white/95 shadow">
+                    <mat-icon class="text-[10px] w-3 h-3 flex items-center justify-center font-bold">zoom_in</mat-icon>
+                  </div>
+                </button>
+                <p id="m-bio-p1-id">
+                  Backend-focused Computer Science student specializing in .NET, web technologies, and AI automation. Experienced in building secure APIs and full-stack, database-driven applications using C#, ASP.NET Core, SQL Server, and Angular, while developing workflow automations with n8n and AI integrations.
+                </p>
+                <p id="m-bio-p2-id">
+                  Delivered projects with authentication, real-time features, clean architecture, and intelligent automation. Known for maintainable code, fast learning, and scalable software. As a student at Assiut National University with a CGPA of 3.9 / 4.0, Fathy blends theory with applied full-stack pipelines.
+                </p>
+                <p id="m-bio-p3-id" class="italic text-stone-500 font-sans text-[10px] border-l border-amber-800/20 pl-2 mt-2">
+                  "Automating complex structures to empower intuitive digital solutions."
+                </p>
+              </div>
+            </div>
+          }
+
+          <!-- Page 5: Skills Glossary -->
+          @if (currentPage() === 5) {
+            <div id="m-sk-id" class="flex flex-col h-full py-2">
+              <h3 id="m-sk-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter II</h3>
+              <h2 id="m-sk-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-3">Skills Glossary</h2>
+              <div id="m-sk-list-id" class="space-y-3 overflow-y-auto max-h-[360px] pr-1">
+                <!-- Mobile Skills Banner Image -->
+                <div id="m-sk-illustration-id" class="w-full h-20 rounded border border-amber-900/15 overflow-hidden shadow-sm bg-stone-50 p-1">
+                  <img id="m-sk-banner-img-id" src="/skills_illustration.jpg" alt="Scientific Computing Illustration" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                </div>
+
+                <div id="m-sk-box-1-id" class="p-2 border border-stone-300/40 rounded bg-stone-50/40">
+                  <div id="m-sk-title-1-id" class="font-mono text-[8px] font-bold text-amber-900 uppercase">Programming Languages</div>
+                  <div id="m-sk-desc-1-id" class="text-stone-700 text-xs font-serif">Scratch, C, C++, C#, Java, Python, LaTeX, HTML, CSS, JavaScript, MATLAB, Lua</div>
+                </div>
+                <div id="m-sk-box-2-id" class="p-2 border border-stone-300/40 rounded bg-stone-50/40">
+                  <div id="m-sk-title-2-id" class="font-mono text-[8px] font-bold text-amber-900 uppercase">Frameworks</div>
+                  <div id="m-sk-desc-2-id" class="text-stone-700 text-xs font-serif">n8n, .Net, Flask, Angular, React, Blazor</div>
+                </div>
+                <div id="m-sk-box-3-id" class="p-2 border border-stone-300/40 rounded bg-stone-50/40">
+                  <div id="m-sk-title-3-id" class="font-mono text-[8px] font-bold text-amber-900 uppercase">Database</div>
+                  <div id="m-sk-desc-3-id" class="text-stone-700 text-xs font-serif">Microsoft Access, MySQL, SQL Server, MongoDB, SQLite</div>
+                </div>
+                <div id="m-sk-box-4-id" class="p-2 border border-stone-300/40 rounded bg-stone-50/40">
+                  <div id="m-sk-title-4-id" class="font-mono text-[8px] font-bold text-amber-900 uppercase">Tools &amp; Technologies</div>
+                  <div id="m-sk-desc-4-id" class="text-stone-700 text-xs font-serif">Git, GitHub, Docker, CI/CD (GitHub Actions), JSON</div>
+                </div>
+                <div id="m-sk-box-5-id" class="p-2 border border-stone-300/40 rounded bg-stone-50/40">
+                  <div id="m-sk-title-5-id" class="font-mono text-[8px] font-bold text-amber-900 uppercase">Other</div>
+                  <div id="m-sk-desc-5-id" class="text-stone-700 text-xs font-serif">Object Oriented Programming, Data Structures, Algorithms, AI and Machine Learning, Problem Solving, Active Listening, Research, Time Management, Leadership, Critical Thinking, Arabic (Native), English (Fluent)</div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 6: Chronology of Experience -->
+          @if (currentPage() === 6) {
+            <div id="m-exp-id" class="flex flex-col h-full py-2">
+              <h3 id="m-exp-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter III</h3>
+              <h2 id="m-exp-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-2">Chronology of Experience</h2>
+              
+              <div id="m-exp-cards-id" class="space-y-3 overflow-y-auto max-h-[360px] pr-1">
+                <!-- CIB Experience -->
+                <div id="m-exp-cib-id" class="p-3 border border-stone-300/50 rounded bg-stone-50/30 relative pl-5 border-l-2 border-l-amber-800/20">
+                  <div class="absolute -left-[5px] top-4 w-2.5 h-2.5 rounded-full bg-amber-800 border border-stone-50"></div>
+                  <div class="flex justify-between items-start mb-1 flex-wrap">
+                    <h4 class="font-serif text-xs font-bold text-stone-800">Commercial International Bank (CIB)</h4>
+                    <span class="font-mono text-[7px] text-amber-800 bg-amber-50 px-1 py-0.5 rounded border border-amber-800/10 uppercase">August 2025</span>
+                  </div>
+                  <div class="font-sans font-medium text-stone-500 text-[9px] uppercase tracking-wide mb-1.5">Summer Intern · Backend &amp; Cybersecurity</div>
+                  <div class="flex gap-3 items-start">
+                    <p class="text-[11px] font-serif text-stone-600 leading-relaxed flex-1">
+                      Facilitated banking digital transformation by developing backend APIs, implementing cybersecurity protocols, and leveraging agile methodologies for secure software delivery.
+                    </p>
+                    
+                    <!-- CIB Image Mobile Thumbnail -->
+                    <button type="button" (click)="openLightbox('/cib.jpeg', 'Commercial International Bank (CIB), Egypt', 'Summer Internship Program in Backend & Cybersecurity (August 2025) at Commercial International Bank.')" class="w-12 h-12 shrink-0 rounded border border-amber-900/15 p-0.5 bg-amber-50/70 shadow-sm active:scale-95 transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none">
+                      <img src="/cib.jpeg" alt="CIB internship" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                    </button>
+                  </div>
+                  <div class="flex flex-wrap gap-1 mt-2">
+                    <span class="font-mono text-[7px] px-1 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">REST APIs</span>
+                    <span class="font-mono text-[7px] px-1 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Cybersecurity</span>
+                    <span class="font-mono text-[7px] px-1 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Agile</span>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          }
+
+          <!-- Page 7: Masterwork I — Kindo -->
+          @if (currentPage() === 7) {
+            <div id="m-p1-id" class="flex flex-col h-full py-2">
+              <h3 id="m-p1-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter IV</h3>
+              <h2 id="m-p1-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-2.5">Masterwork I — Kindo</h2>
+              
+              <div id="m-p1-content-id" class="flex flex-col h-full justify-between overflow-y-auto pr-1">
+                <button type="button" id="m-kindo-img-container" (click)="openLightbox('/kindo.jpeg', 'Kindo — Kindness Ripple Social Platform', 'Developed a kindness-sharing platform connecting users through ripple-linked posts across communities worldwide daily.')" class="w-full h-20 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative overflow-hidden block text-left shrink-0 mb-2 focus:outline-none">
+                  <img id="m-kindo-img-id" src="/kindo.jpeg" alt="Kindo platform screenshot" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                </button>
+
+                <div class="text-stone-700 text-xs font-serif leading-relaxed mb-2">
+                  <p class="font-semibold text-stone-800 mb-1">Kindness Ripple Social Platform (April 2026)</p>
+                  <ul class="list-disc pl-4 space-y-1 text-stone-600">
+                    <li>Developed a kindness-sharing platform connecting users through ripple-linked posts across communities worldwide daily.</li>
+                    <li>Built core social features enabling users to post Kindos, react, comment, follow, save, and chat live securely together.</li>
+                    <li>Implemented Identity authentication, challenge flows, Hangfire badge jobs, & moderation reporting pipeline end-to-end.</li>
+                  </ul>
+                </div>
+
+                <div class="mb-2">
+                  <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Tech Stack</div>
+                  <div class="flex flex-wrap gap-1">
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET MVC</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">EF Core</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SignalR</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Hangfire</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SQL Server</span>
+                  </div>
+                </div>
+
+                <div class="pt-2 border-t border-stone-200/60">
+                  <div class="flex gap-1.5">
+                    <a href="https://github.com/Fetoooo/Kindo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                      <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                      <span>GitHub</span>
+                    </a>
+                    <a href="https://kindo.runasp.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                      <mat-icon class="text-[14px] w-[14px] h-[14px] leading-none">open_in_new</mat-icon>
+                      <span>Live Demo</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 8: Masterwork II — Nexly -->
+          @if (currentPage() === 8) {
+            <div id="m-p2-id" class="flex flex-col h-full py-2">
+              <h3 id="m-p2-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter IV</h3>
+              <h2 id="m-p2-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-2.5">Masterwork II — Nexly</h2>
+              
+              <div id="m-p2-content-id" class="flex flex-col h-full justify-between overflow-y-auto pr-1">
+                <button type="button" id="m-nexly-img-container" (click)="openLightbox('/nexly.jpeg', 'Nexly — Neighborhood Skill-Sharing Platform', 'Developed a skill-sharing marketplace connecting service providers with local customers for various categories.')" class="mb-2 w-full h-28 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative overflow-hidden block text-left shrink-0 focus:outline-none">
+                  <img id="m-nexly-img-id" src="/nexly.jpeg" alt="Nexly platform screenshot" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                </button>
+
+                <div class="text-stone-700 text-xs font-serif leading-relaxed mb-2">
+                  <p class="font-semibold text-stone-800 mb-1">Skill-Sharing Marketplace (January 2026)</p>
+                  <ul class="list-disc pl-4 space-y-1 text-stone-600">
+                    <li>Engineered a high-performance, dual-sided marketplace to match service providers with local clients seamlessly.</li>
+                    <li>Powered by ASP.NET Core Web API and React, featuring secure Stripe payments, appointment bookings, and live messaging.</li>
+                    <li>Integrated an intelligent, AI-powered conversational coordinator "Nexy" to facilitate optimal skill pairings and bookings.</li>
+                  </ul>
+                </div>
+
+                <div class="mb-2">
+                  <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Tech Stack</div>
+                  <div class="flex flex-wrap gap-1">
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">React</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">TypeScript</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Web API</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SQL Server</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Stripe API</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Cloudinary</span>
+                  </div>
+                </div>
+
+                <div class="pt-2 border-t border-stone-200/60">
+                  <div class="flex gap-1.5">
+                    <a href="https://github.com/Fetoooo/Nexly" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                      <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                      <span>GitHub</span>
+                    </a>
+                    <a href="https://nexly.runasp.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                      <mat-icon class="text-[14px] w-[14px] h-[14px] leading-none">open_in_new</mat-icon>
+                      <span>Live Demo</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 9: Masterwork III — TongueSpace -->
+          @if (currentPage() === 9) {
+            <div id="m-p3-id" class="flex flex-col h-full py-2">
+              <h3 id="m-p3-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter IV</h3>
+              <h2 id="m-p3-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-2.5">Masterwork III — TongueSpace</h2>
+              
+              <div id="m-p3-content-id" class="flex flex-col h-full justify-between overflow-y-auto pr-1">
+                <button type="button" id="m-tongue-img-container" (click)="openLightbox('/tonguespace.jpeg', 'TongueSpace — Language Learning Platform', 'Developed a comprehensive language learning platform offering courses in Arabic, English, French, German, and Spanish.')" class="mb-2 w-full h-28 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative overflow-hidden block text-left shrink-0 focus:outline-none">
+                  <img id="m-tongue-img-id" src="/tonguespace.jpeg" alt="TongueSpace platform screenshot" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                </button>
+
+                <div class="text-stone-700 text-xs font-serif leading-relaxed mb-2">
+                  <p class="font-semibold text-stone-800 mb-1">Language Learning Platform (August 2025)</p>
+                  <ul class="list-disc pl-4 space-y-1 text-stone-600">
+                    <li>Developed a comprehensive language learning platform offering courses in Arabic, English, French, German, and Spanish.</li>
+                    <li>Built a dual-sided marketplace enabling learners to enroll in courses &amp; instructors to create &amp; manage their own content.</li>
+                    <li>Implemented user authentication, role-based access control, and progress tracking with a wonderful certificate generation.</li>
+                  </ul>
+                </div>
+
+                <div class="mb-2">
+                  <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Tech Stack</div>
+                  <div class="flex flex-wrap gap-1">
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET Web API</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">EF Core</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">ASP.NET Identity</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">React/Blazor</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">SQL Server</span>
+                  </div>
+                </div>
+
+                <div class="pt-2 border-t border-stone-200/60">
+                  <div class="flex gap-1.5">
+                    <a href="https://github.com/Fetoooo/TongueSpace" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                      <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                      <span>GitHub</span>
+                    </a>
+                    <a href="https://tonguespace.runasp.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                      <mat-icon class="text-[14px] w-[14px] h-[14px] leading-none">open_in_new</mat-icon>
+                      <span>Live Demo</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 10: Masterwork IV — Tech Tutor -->
+          @if (currentPage() === 10) {
+            <div id="m-p4-id" class="flex flex-col h-full py-2">
+              <h3 id="m-p4-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter IV</h3>
+              <h2 id="m-p4-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-2.5">Masterwork IV — Tech Tutor</h2>
+              
+              <div id="m-p4-content-id" class="flex flex-col h-full justify-between overflow-y-auto pr-1">
+                <button type="button" id="m-tutor-img-container" (click)="openLightbox('/youtube.jpeg', 'Masterwork IV — Tech Tutor', 'CS Education & Community Mentoring')" class="mb-2 w-full h-28 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative overflow-hidden block text-left shrink-0 focus:outline-none">
+                  <img id="m-tutor-img-id" src="/youtube.jpeg" alt="Tech Tutor YouTube channel" class="w-full h-full object-cover rounded-xs" referrerpolicy="no-referrer" />
+                </button>
+
+                <div id="m-tutor-tape-visual" class="mb-2 p-2 rounded bg-amber-900/10 border border-amber-800/20 flex items-center justify-between shrink-0">
+                  <span class="text-stone-700 font-mono text-[8px] flex items-center gap-1 font-bold">
+                    <mat-icon class="text-red-600 text-xs">play_arrow</mat-icon> 25+ Educational Videos
+                  </span>
+                  <span class="font-mono text-[8px] text-stone-600 font-bold bg-amber-200/50 px-1.5 py-0.5 rounded">19K+ VIEWS</span>
+                </div>
+
+                <div class="text-stone-700 text-xs font-serif leading-relaxed mb-2">
+                  <p class="font-semibold text-stone-800 mb-1">CS Education &amp; Peer Mentoring</p>
+                  <ul class="list-disc pl-4 space-y-1 text-stone-600">
+                    <li>Proactively simplified complex Computer Science topics via a dedicated YouTube channel "Tech Tutor" with 19K+ organic views.</li>
+                    <li>Personally tutored over 1,000+ peers in practical software labs and database administration assignments.</li>
+                    <li>Coached and mentored local youth scout divisions to successfully acquire specialized Programmer Badges.</li>
+                  </ul>
+                </div>
+
+                <div class="mb-2">
+                  <div class="font-mono text-[8px] tracking-wider uppercase text-amber-900 font-bold mb-1">Applied Domains</div>
+                  <div class="flex flex-wrap gap-1">
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Video Production</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Peer Tutoring</span>
+                    <span class="font-mono text-[8px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">Scout Mentorship</span>
+                  </div>
+                </div>
+
+                <div class="pt-2 border-t border-stone-200/60">
+                  <a href="https://www.youtube.com/@FathyAyman-h7r" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-stone-700 hover:text-amber-800 transition text-[9px] font-mono no-underline border border-stone-300 rounded px-2 py-0.5 bg-stone-50 hover:bg-amber-50/50">
+                    <svg class="w-3.5 h-3.5 fill-current text-red-600" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    <span>YouTube Channel</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 11: Records of Distinction I -->
+          @if (currentPage() === 11) {
+            <div id="m-cert-1-id" class="flex flex-col h-full py-2">
+              <h3 id="m-cert-1-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter V</h3>
+              <h2 id="m-cert-1-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-4">Records of Distinction (I)</h2>
+              
+              <div id="m-cert-1-cards-id" class="space-y-4 pr-1">
+                <button type="button" (click)="openLightbox('/hackthon.jpeg', 'Techora ICT Campus 2026 Hackathon', 'Ranked amongst the Top 15 finalists out of 70+ elite teams')" class="w-full h-48 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01] mb-2">
+                  <img src="/hackthon.jpeg" alt="Hackathon Team" class="w-full h-full object-cover object-center rounded-xs" referrerpolicy="no-referrer" />
+                  <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+                    <mat-icon class="text-white text-base">zoom_in</mat-icon>
+                  </div>
+                </button>
+
+                <div id="m-honor-1-id" class="flex gap-2.5 items-start">
+                  <mat-icon id="m-cup-icon" class="text-yellow-600 text-sm">emoji_events</mat-icon>
+                  <div id="m-honor-text-1-id" class="text-xs font-serif leading-relaxed flex flex-col gap-2">
+                    <h4 id="m-honor-title-text-1-id" class="font-bold text-stone-800">Techora ICT Hackathon Finalist</h4>
+                    <p id="m-honor-desc-1-id" class="text-stone-600 text-[11px]">Ranked Top 15 finalists out of 70+ elite regional groups with recycling technology EcoCash.</p>
+                    <a href="https://www.linkedin.com/posts/fathy-gendy-872258285_ecocash-hackathon-gdg-ugcPost-7473363569804259329-1ehC/?utm_source=share&utm_medium=member_android&rcm=ACoAAEVFN9YBS9qTarTlsDkQ5g5nu2quP3IB48s" target="_blank" rel="noopener noreferrer" class="inline-flex w-fit items-center gap-1 text-blue-700 hover:text-blue-900 transition text-[8px] font-mono no-underline border border-blue-200 rounded px-1.5 py-0.5 bg-blue-50">
+                      <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                      <span>LinkedIn</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 12: Records of Distinction II -->
+          @if (currentPage() === 12) {
+            <div id="m-cert-2-id" class="flex flex-col h-full py-2">
+              <h3 id="m-cert-2-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter V</h3>
+              <h2 id="m-cert-2-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-4">Records of Distinction (II)</h2>
+              
+              <div id="m-cert-2-cards-id" class="space-y-4 overflow-y-auto max-h-[350px] pr-1">
+                <div class="flex gap-2 mb-2">
+                  <button type="button" (click)="openLightbox('/s1.jpeg', 'Sawiris Linkage Scholar', 'Awarded a highly competitive fully funded scholarship')" class="flex-1 h-20 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01]">
+                    <img src="/s1.jpeg" alt="Sawiris Scholar 1" class="w-full h-full object-cover object-top rounded-xs" referrerpolicy="no-referrer" />
+                  </button>
+                  <button type="button" (click)="openLightbox('/s2.jpeg', 'Sawiris Linkage Scholar', 'Awarded a highly competitive fully funded scholarship')" class="flex-1 h-20 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm relative group cursor-pointer overflow-hidden block text-left transition-all duration-300 focus:outline-none hover:scale-[1.01]">
+                    <img src="/s2.jpeg" alt="Sawiris Scholar 2" class="w-full h-full object-cover object-top rounded-xs" referrerpolicy="no-referrer" />
+                  </button>
+                </div>
+
+                <div id="m-honor-2-id" class="flex gap-2.5 items-start">
+                  <mat-icon id="m-school-icon" class="text-blue-600 text-sm">school</mat-icon>
+                  <div id="m-honor-text-2-id" class="text-xs font-serif leading-relaxed flex flex-col gap-2">
+                    <h4 id="m-honor-title-text-2-id" class="font-bold text-stone-800">Sawiris Linkage Scholar</h4>
+                    <p id="m-honor-desc-2-id" class="text-stone-600 text-[11px]">Fully funded scholarship recipient (Top 45 selected students from Upper Egypt). TOEFL speaking score of C2 Level.</p>
+                    <a href="https://www.linkedin.com/posts/fathy-gendy-872258285_i-cannot-believe-that-i-finally-graduated-activity-7109505696068435968-T70c?utm_source=share&utm_medium=member_android&rcm=ACoAAEVFN9YBS9qTarTlsDkQ5g5nu2quP3IB48s" target="_blank" rel="noopener noreferrer" class="inline-flex w-fit items-center gap-1 text-blue-700 hover:text-blue-900 transition text-[8px] font-mono no-underline border border-blue-200 rounded px-1.5 py-0.5 bg-blue-50">
+                      <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                      <span>LinkedIn</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Page 13: Contact Directory -->
+          @if (currentPage() === 13) {
+            <div id="m-social-id" class="flex flex-col h-full py-2">
+              <h3 id="m-social-lbl-id" class="text-amber-800 font-mono text-[8px] tracking-widest uppercase mb-1">Chapter VI</h3>
+              <h2 id="m-social-h2-id" class="font-serif text-stone-800 text-base font-bold uppercase tracking-wider mb-2">Contact Directory</h2>
+              
+              <div id="m-social-cards-id" class="space-y-2.5 overflow-y-auto max-h-[360px] pr-1">
+                <!-- Mail -->
+                <a href="mailto:fathy.gendy.slp&#64;gmail.com" class="flex gap-2.5 items-center p-2 rounded border border-stone-300/40 bg-stone-50/20 no-underline text-stone-800 cursor-pointer hover:bg-amber-50/20 transition">
+                  <div class="p-1.5 bg-amber-100 text-amber-800 rounded flex items-center justify-center">
+                    <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">mail</mat-icon>
+                  </div>
+                  <div class="text-[11px] flex-1">
+                    <h4 class="font-bold text-stone-800 font-serif text-[10px] uppercase tracking-wide">Electronic Mail</h4>
+                    <p class="font-mono text-stone-700 text-[9px] mt-0.5">fathy.gendy.slp&#64;gmail.com</p>
+                  </div>
+                </a>
+
+                <!-- Phone -->
+                <div class="flex gap-2.5 items-center p-2 rounded border border-stone-300/40 bg-stone-50/20 text-stone-800">
+                  <div class="p-1.5 bg-emerald-100 text-emerald-800 rounded flex items-center justify-center">
+                    <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">phone</mat-icon>
+                  </div>
+                  <div class="text-[11px] flex-1">
+                    <h4 class="font-bold text-stone-800 font-serif text-[10px] uppercase tracking-wide">Direct Telephone</h4>
+                    <p class="font-mono text-stone-700 text-[9px] mt-0.5">+201093790392</p>
+                  </div>
+                </div>
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/fathy-gendy-872258285/" target="_blank" rel="noopener noreferrer" class="flex gap-2.5 items-center p-2 rounded border border-stone-300/40 bg-stone-50/20 no-underline text-stone-800 cursor-pointer hover:bg-blue-50/20 transition">
+                  <div class="p-1.5 bg-blue-100 text-blue-800 rounded flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </div>
+                  <div class="text-[11px] flex-1">
+                    <h4 class="font-bold text-stone-800 font-serif text-[10px] uppercase tracking-wide">LinkedIn Network</h4>
+                    <p class="font-mono text-stone-700 text-[9px] mt-0.5">linkedin.com/in/fathy-gendy</p>
+                  </div>
+                </a>
+
+                <!-- GitHub -->
+                <a href="https://github.com/Fetoooo" target="_blank" rel="noopener noreferrer" class="flex gap-2.5 items-center p-2 rounded border border-stone-300/40 bg-stone-50/20 no-underline text-stone-800 cursor-pointer hover:bg-stone-100/20 transition">
+                  <div class="p-1.5 bg-stone-200 text-stone-800 rounded flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                  </div>
+                  <div class="text-[11px] flex-1">
+                    <h4 class="font-bold text-stone-800 font-serif text-[10px] uppercase tracking-wide">GitHub Repository</h4>
+                    <p class="font-mono text-stone-700 text-[9px] mt-0.5">github.com/Fetoooo</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          }
+
+          <!-- Page 14: Colophon & The End -->
+          @if (currentPage() === 14) {
+            <div id="m-colophon-container-id" class="flex flex-col items-center justify-center text-center h-full py-12 space-y-4">
+              <h3 id="m-colophon-lbl-id" class="font-serif text-stone-800 text-xl font-bold uppercase tracking-widest">The End</h3>
+              <p id="m-colophon-text-id" class="font-serif italic text-stone-600/70 text-[10px] max-w-[22ch] leading-relaxed mb-4">
+                Finis
+              </p>
+              <div id="m-colophon-div-id" class="w-8 h-[1px] bg-amber-800/20"></div>
+              <h3 id="m-colophon-lbl-id-2" class="font-serif text-amber-800 text-[10px] font-bold uppercase tracking-widest mt-4">Colophon</h3>
+              <p id="m-colophon-text-id-2" class="font-serif italic text-stone-600 text-[10px] max-w-[22ch] leading-relaxed mb-6">
+                Handcrafted in Zoneless Angular, typeset in Inter &amp; JetBrains Mono, and deployed on Vercel.
+              </p>
+              <button type="button" id="m-colophon-next-btn" class="px-4 py-1.5 border border-stone-800/30 hover:bg-stone-800/5 rounded-full text-stone-700 font-mono text-[9px] tracking-widest uppercase transition active:scale-95 cursor-pointer bg-transparent flex items-center justify-center gap-1.5 mt-8 z-10" (click)="closeJournal()">
+                Close Journal <mat-icon class="text-xs">arrow_forward</mat-icon>
+              </button>
+            </div>
+          }
+
+          <!-- Page 15: Back Cover -->
+          @if (currentPage() === 15) {
+            <div id="m-cov-back-id" class="flex flex-col items-center justify-center text-center h-full py-12 space-y-6 relative w-full">
+              <div class="cover-inner-border"></div>
+              <div class="gold-corner top-left"></div>
+              <div class="gold-corner top-right"></div>
+              <div class="gold-corner bottom-left"></div>
+              <div class="gold-corner bottom-right"></div>
+
+              <div id="m-cov-back-crest-id" class="text-yellow-500 text-3xl font-serif z-10 animate-pulse">☬</div>
+              <div id="m-cov-back-brand-id" class="font-serif text-base tracking-[0.2em] uppercase text-yellow-200 font-bold z-10">FATHY GENDY</div>
+              <div id="m-cov-back-tag-id" class="font-mono text-[9px] text-amber-300/60 uppercase tracking-wider z-10">Software Engineer · Cairo</div>
+                
+              <button id="m-cov-back-btn-id" class="mt-6 px-4 py-1.5 border border-yellow-500/40 hover:bg-yellow-500/10 rounded-full text-yellow-200 font-mono text-[9px] uppercase tracking-widest cursor-pointer bg-transparent z-10 transition active:scale-95" (click)="closeJournal()">
+                Go to Front Cover
+              </button>
+            </div>
+          }
+
+        </div>
+
+        <!-- Mobile Page Indicator bottom bar -->
+        <div id="m-indicator-bar-id" class="border-t p-3 flex justify-between items-center z-10 font-mono text-[10px] transition-all duration-500"
+             [style.background]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? '#2e080b' : 'rgba(250, 245, 230, 0.9)'"
+             [style.border-color]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? 'rgba(251, 191, 36, 0.15)' : '#e7e5e4'"
+             [style.color]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? '#fef08a' : '#78716c'">
+          <button id="m-prev-arrow-btn-id" class="flex items-center gap-1 disabled:opacity-30 disabled:pointer-events-none cursor-pointer border-0 bg-transparent font-medium"
+                  [style.color]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? '#fef08a' : '#57534e'"
+                  [disabled]="currentPage() === 0" (click)="prevPage()">
+            <mat-icon id="m-left-chevron-icon" class="text-sm">chevron_left</mat-icon> Prev
+          </button>
+          <span id="m-page-counter-lbl-id">Page {{ currentPage() + 1 }} / 16</span>
+          <button id="m-next-arrow-btn-id" class="flex items-center gap-1 disabled:opacity-30 disabled:pointer-events-none cursor-pointer border-0 bg-transparent font-medium"
+                  [style.color]="(currentPage() === 0 || currentPage() === 1 || currentPage() === 15 ) ? '#fef08a' : '#57534e'"
+                  [disabled]="currentPage() === totalPages - 1" (click)="nextPage()">
+            Next <mat-icon id="m-right-chevron-icon" class="text-sm">chevron_right</mat-icon>
+          </button>
+        </div>
+
+      </div>
+    }
+
+  </div>
+
+
+  <!-- ---- TACTILE BRASS DECK (DESKTOP CONTROLS) ---- -->
+  @if (!isMobile()) {
+    <div id="brass-controls-deck-id" class="brass-controls-deck">
+      <button id="brass-btn-prev-id" class="brass-btn cursor-pointer" [disabled]="currentSheet() === 0" (click)="prevSheet()" aria-label="Turn page left">
+        <mat-icon id="brass-left-chevron-icon">arrow_back</mat-icon>
+      </button>
+      
+      <div id="brass-counter-id" class="brass-counter">
+        @if (currentSheet() === 0) {
+          <span>COVER</span>
+        } @else if (currentSheet() === totalSheets - 1) {
+          <span>FINIS</span>
+        } @else {
+          <span>SHEET {{ currentSheet() }} / 6</span>
+        }
+      </div>
+
+      <button id="brass-btn-next-id" class="brass-btn cursor-pointer" [disabled]="false" (click)="nextSheet()" aria-label="Turn page right">
+        <mat-icon id="brass-right-chevron-icon">arrow_forward</mat-icon>
+      </button>
+    </div>
+    
+    <div id="brass-hint-id" class="mt-3 text-amber-500/50 font-mono text-[9px] tracking-widest uppercase text-center">
+      Tip: Press left/right arrow keys or click book tabs to read
+    </div>
+  }
+
+  <!-- ---- HIGH FIDELITY IMAGE LIGHTBOX MODAL ---- -->
+  @if (isLightboxOpen()) {
+    <div id="image-lightbox-id" class="fixed inset-0 flex flex-col items-center justify-center p-4 z-[99999] transition-all duration-300">
+      <!-- Backdrop Button (handles click-to-close and is focusable for accessibility) -->
+      <button type="button" class="absolute inset-0 bg-stone-950/90 backdrop-blur-md w-full h-full border-0 cursor-default focus:outline-none" (click)="isLightboxOpen.set(false); isZoomed.set(false)" aria-label="Close fullscreen view"></button>
+
+      <!-- Modal card -->
+      <div class="relative w-full max-w-3xl max-h-[92vh] bg-stone-900 border border-yellow-500/30 rounded-lg p-4 shadow-2xl flex flex-col items-center transition-transform duration-300 scale-100 z-10">
+        <!-- Close Button -->
+        <button type="button" id="lightbox-close-btn" class="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-8 h-8 md:w-9 md:h-9 bg-yellow-600 hover:bg-yellow-500 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-90 cursor-pointer border-0 z-50 focus:outline-none" (click)="isLightboxOpen.set(false); isZoomed.set(false)" aria-label="Close fullscreen view">
+          <mat-icon class="text-sm">close</mat-icon>
+        </button>
+
+        <!-- Lightbox Action Controls (Dynamic Zoom Indicator) -->
+        <div class="w-full flex items-center justify-between mb-2 px-1">
+          <span class="text-[10px] font-mono text-amber-200/50 uppercase tracking-widest">Portrait Viewer</span>
+          <button type="button" class="flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 bg-stone-800 hover:bg-stone-700 active:scale-95 border border-yellow-500/20 hover:border-yellow-500/40 text-yellow-100/90 hover:text-yellow-100 rounded transition cursor-pointer" (click)="isZoomed.set(!isZoomed())">
+            <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">{{ isZoomed() ? 'zoom_out' : 'zoom_in' }}</mat-icon>
+            {{ isZoomed() ? 'Zoom Out' : 'Zoom In' }}
+          </button>
+        </div>
+
+        <!-- Main Portrait Image -->
+        <div class="overflow-auto rounded border border-stone-800 bg-stone-950 flex w-full max-h-[62vh] md:max-h-[68vh] relative min-h-[250px]"
+             [class.items-center]="!isZoomed()" [class.justify-center]="!isZoomed()"
+             [class.items-start]="isZoomed()" [class.justify-start]="isZoomed()">
+          @if (!isZoomed()) {
+            <button type="button" 
+                    (click)="isZoomed.set(true)"
+                    class="w-full h-full flex items-center justify-center p-2 border-0 bg-transparent focus:outline-none cursor-zoom-in"
+                    aria-label="Zoom in portrait">
+              <img id="lightbox-img-id" [src]="lightboxImage()" [alt]="lightboxCaption()" 
+                   class="max-h-[58vh] md:max-h-[64vh] max-w-full object-contain pointer-events-none rounded shadow" 
+                   referrerpolicy="no-referrer" />
+            </button>
+          } @else {
+            <button type="button" 
+                    (click)="isZoomed.set(false)"
+                    class="w-full flex items-start justify-start p-4 border-0 bg-transparent focus:outline-none cursor-zoom-out"
+                    aria-label="Zoom out portrait">
+              <img id="lightbox-img-id" [src]="lightboxImage()" [alt]="lightboxCaption()" 
+                   class="w-[220%] md:w-[180%] max-w-none h-auto pointer-events-none rounded shadow-lg" 
+                   referrerpolicy="no-referrer" />
+            </button>
+          }
+        </div>
+
+        <!-- Description/Caption -->
+        <div class="mt-4 text-center max-w-md px-2">
+          <h4 class="font-serif text-yellow-100 font-semibold text-sm tracking-wide">{{ lightboxCaption() }}</h4>
+          <p class="font-serif italic text-amber-200/70 text-xs mt-1 leading-relaxed">
+            {{ lightboxSubcaption() }}
+          </p>
+          <p class="text-[9px] font-sans text-stone-400 mt-2 flex items-center justify-center gap-1">
+            <mat-icon class="text-[11px] w-3 h-3 flex items-center justify-center">info</mat-icon>
+            {{ isZoomed() ? 'Scroll or drag inside the photo to inspect the facade text in crystal-clear detail.' : 'Click the photo or the Zoom button to inspect the facade text in crystal-clear detail.' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+</div>
