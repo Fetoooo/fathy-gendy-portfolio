@@ -123,9 +123,15 @@
 
             <p id="cover-location-id" class="font-mono text-[10px] tracking-[0.15em] uppercase text-amber-300/70 mb-4">Cairo, Egypt · Est. 2023</p>
             
-            <button id="cover-open-btn-id" class="mt-2 px-5 py-2.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-stone-950 font-mono font-semibold text-xs tracking-wider uppercase transition shadow-lg hover:shadow-yellow-500/20 active:scale-95 cursor-pointer border-0" (click)="nextSheet()">
-              Open Journal
-            </button>
+            <div class="flex gap-3 mt-2 z-10">
+              <button id="cover-open-btn-id" class="px-5 py-2.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-stone-950 font-mono font-semibold text-xs tracking-wider uppercase transition shadow-lg hover:shadow-yellow-500/20 active:scale-95 cursor-pointer border-0" (click)="nextSheet()">
+                Open Journal
+              </button>
+              <a href="https://drive.google.com/file/d/15sOqNV2XMC-21da6i0ITbo92CDe55spA/view?usp=drive_link" target="_blank" rel="noopener noreferrer" id="cover-cv-btn-id" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-yellow-500/40 hover:bg-yellow-500/10 text-yellow-100 font-mono font-semibold text-xs tracking-wider uppercase transition shadow-lg hover:shadow-yellow-500/10 active:scale-95 no-underline">
+                <mat-icon class="text-sm">file_download</mat-icon>
+                <span>Download CV</span>
+              </a>
+            </div>
           </div>
 
           <!-- SHEET 0 BACK: INSIDE FRONT COVER -->
@@ -280,6 +286,12 @@
               <p id="bio-p4-id" class="text-stone-500 font-sans text-[10px] italic border-l border-amber-800/20 pl-3 py-1 mt-4">
                 "Fast-learning, meticulous, and dedicated to the craft of stable software systems."
               </p>
+              <div class="pt-4 flex justify-start">
+                <a href="https://drive.google.com/file/d/15sOqNV2XMC-21da6i0ITbo92CDe55spA/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded border border-amber-800/30 hover:bg-amber-800/5 text-amber-900 font-mono font-medium text-[10px] tracking-wider uppercase transition active:scale-95 no-underline bg-amber-50/10">
+                  <mat-icon class="text-sm">file_download</mat-icon>
+                  <span>Download Curriculum Vitae (CV)</span>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -385,9 +397,15 @@
                 <div class="font-sans font-medium text-stone-500 text-[10px] uppercase tracking-wide mb-2.5">Summer Intern · Backend &amp; Cybersecurity</div>
                 
                 <div class="flex gap-3 items-start">
-                  <p id="exp-desc-1-id" class="text-stone-700 text-justify mb-2 leading-relaxed flex-1">
-                    Facilitated banking digital transformation by developing backend APIs, implementing cybersecurity protocols, and leveraging agile methodologies for secure, cloud-based software delivery.
-                  </p>
+                  <div class="flex-1 flex flex-col items-start gap-2">
+                    <p id="exp-desc-1-id" class="text-stone-700 text-justify mb-1 leading-relaxed">
+                      Facilitated banking digital transformation by developing backend APIs, implementing cybersecurity protocols, and leveraging agile methodologies for secure, cloud-based software delivery.
+                    </p>
+                    <a href="https://www.linkedin.com/posts/fathy-gendy-872258285_cibabrsummerabrinternshipabr2025-cibbankegypt-activity-7360678867721760768-qimg?utm_source=share&utm_medium=member_android&rcm=ACoAAEVFN9YBS9qTarTlsDkQ5g5nu2quP3IB48s" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 transition text-[9px] font-mono no-underline border border-blue-200 rounded px-2 py-0.5 bg-blue-50">
+                      <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                      <span>View LinkedIn Post</span>
+                    </a>
+                  </div>
                   
                   <!-- CIB Image Thumbnail -->
                   <button type="button" (click)="openLightbox('/cib.jpeg', 'Commercial International Bank (CIB), Egypt', 'Summer Internship Program in Backend & Cybersecurity (August 2025) at Commercial International Bank.')" class="w-16 h-16 shrink-0 rounded border border-amber-900/15 p-1 bg-amber-50/70 shadow-sm rotate-[-1deg] hover:rotate-[0deg] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer overflow-hidden relative group focus:outline-none">
@@ -739,6 +757,18 @@
                 </div>
               </a>
 
+              <!-- Contact Card: Curriculum Vitae -->
+              <a href="https://drive.google.com/file/d/15sOqNV2XMC-21da6i0ITbo92CDe55spA/view?usp=drive_link" target="_blank" rel="noopener noreferrer" id="social-card-cv" class="flex gap-3.5 items-start p-2.5 rounded border border-stone-300/40 bg-stone-50/20 hover:bg-amber-50/30 hover:border-amber-800/20 transition group no-underline text-stone-800 cursor-pointer">
+                <div class="p-2 bg-amber-100 text-amber-800 rounded group-hover:scale-110 transition duration-300 flex items-center justify-center">
+                  <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">description</mat-icon>
+                </div>
+                <div class="text-xs font-serif flex-1 leading-normal">
+                  <h4 class="font-bold text-stone-800 font-serif text-[11px] uppercase tracking-wider text-amber-950 group-hover:text-amber-800 transition">Curriculum Vitae (CV)</h4>
+                  <p class="font-mono text-stone-700 text-[10px] mt-0.5">drive.google.com/fathy-gendy-cv</p>
+                  <p class="text-stone-500 text-[10px] mt-1 font-serif leading-relaxed">Direct link to view, download, or print my comprehensive academic credentials, certifications, and technical experiences.</p>
+                </div>
+              </a>
+
               <!-- Contact Card: Phone -->
               <div id="social-card-phone" class="flex gap-3.5 items-start p-2.5 rounded border border-stone-300/40 bg-stone-50/20 text-stone-800">
                 <div class="p-2 bg-emerald-100 text-emerald-800 rounded flex items-center justify-center">
@@ -869,9 +899,15 @@
 
               <div id="m-cov-loc-id" class="text-amber-300/70 font-mono text-[9px] tracking-wider uppercase z-10">Cairo, Egypt · Est. 2023</div>
               
-              <button id="m-cov-btn-id" class="px-6 py-2.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-stone-950 font-mono font-semibold text-xs uppercase tracking-wider transition shadow-lg active:scale-95 cursor-pointer border-0 z-10" (click)="nextPage()">
-                Open Portfolio
-              </button>
+              <div class="flex flex-col gap-2.5 z-10 w-full max-w-[200px] items-center">
+                <button id="m-cov-btn-id" class="w-full px-6 py-2.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-stone-950 font-mono font-semibold text-xs uppercase tracking-wider transition shadow-lg active:scale-95 cursor-pointer border-0" (click)="nextPage()">
+                  Open Portfolio
+                </button>
+                <a href="https://drive.google.com/file/d/15sOqNV2XMC-21da6i0ITbo92CDe55spA/view?usp=drive_link" target="_blank" rel="noopener noreferrer" id="m-cov-cv-btn-id" class="w-full inline-flex items-center justify-center gap-1.5 px-6 py-2 rounded-full border border-yellow-500/40 hover:bg-yellow-500/10 text-yellow-100 font-mono font-semibold text-[10px] tracking-wider uppercase transition shadow-lg active:scale-95 no-underline">
+                  <mat-icon class="text-xs scale-90">file_download</mat-icon>
+                  <span>Download CV</span>
+                </a>
+              </div>
             </div>
           }
 
@@ -977,6 +1013,12 @@
                 <p id="m-bio-p3-id" class="italic text-stone-500 font-sans text-[10px] border-l border-amber-800/20 pl-2 mt-2">
                   "Automating complex structures to empower intuitive digital solutions."
                 </p>
+                <div class="pt-2 flex justify-start">
+                  <a href="https://drive.google.com/file/d/15sOqNV2XMC-21da6i0ITbo92CDe55spA/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1 rounded border border-amber-800/30 hover:bg-amber-800/5 text-amber-900 font-mono font-medium text-[9px] tracking-wider uppercase transition active:scale-95 no-underline bg-amber-50/10">
+                    <mat-icon class="text-xs scale-90">file_download</mat-icon>
+                    <span>Download CV</span>
+                  </a>
+                </div>
               </div>
             </div>
           }
@@ -1032,9 +1074,15 @@
                   </div>
                   <div class="font-sans font-medium text-stone-500 text-[9px] uppercase tracking-wide mb-1.5">Summer Intern · Backend &amp; Cybersecurity</div>
                   <div class="flex gap-3 items-start">
-                    <p class="text-[11px] font-serif text-stone-600 leading-relaxed flex-1">
-                      Facilitated banking digital transformation by developing backend APIs, implementing cybersecurity protocols, and leveraging agile methodologies for secure software delivery.
-                    </p>
+                    <div class="flex-1 flex flex-col items-start gap-1.5">
+                      <p class="text-[11px] font-serif text-stone-600 leading-relaxed">
+                        Facilitated banking digital transformation by developing backend APIs, implementing cybersecurity protocols, and leveraging agile methodologies for secure software delivery.
+                      </p>
+                      <a href="https://www.linkedin.com/posts/fathy-gendy-872258285_cibabrsummerabrinternshipabr2025-cibbankegypt-activity-7360678867721760768-qimg?utm_source=share&utm_medium=member_android&rcm=ACoAAEVFN9YBS9qTarTlsDkQ5g5nu2quP3IB48s" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-blue-700 hover:text-blue-900 transition text-[8px] font-mono no-underline border border-blue-200 rounded px-1.5 py-0.5 bg-blue-50">
+                        <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        <span>View LinkedIn Post</span>
+                      </a>
+                    </div>
                     
                     <!-- CIB Image Mobile Thumbnail -->
                     <button type="button" (click)="openLightbox('/cib.jpeg', 'Commercial International Bank (CIB), Egypt', 'Summer Internship Program in Backend & Cybersecurity (August 2025) at Commercial International Bank.')" class="w-12 h-12 shrink-0 rounded border border-amber-900/15 p-0.5 bg-amber-50/70 shadow-sm active:scale-95 transition-all duration-300 cursor-pointer overflow-hidden focus:outline-none">
@@ -1316,6 +1364,17 @@
                   <div class="text-[11px] flex-1">
                     <h4 class="font-bold text-stone-800 font-serif text-[10px] uppercase tracking-wide">Electronic Mail</h4>
                     <p class="font-mono text-stone-700 text-[9px] mt-0.5">fathy.gendy.slp&#64;gmail.com</p>
+                  </div>
+                </a>
+
+                <!-- Curriculum Vitae -->
+                <a href="https://drive.google.com/file/d/15sOqNV2XMC-21da6i0ITbo92CDe55spA/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="flex gap-2.5 items-center p-2 rounded border border-stone-300/40 bg-stone-50/20 no-underline text-stone-800 cursor-pointer hover:bg-amber-50/20 transition">
+                  <div class="p-1.5 bg-amber-100 text-amber-800 rounded flex items-center justify-center">
+                    <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">description</mat-icon>
+                  </div>
+                  <div class="text-[11px] flex-1">
+                    <h4 class="font-bold text-stone-800 font-serif text-[10px] uppercase tracking-wide">Curriculum Vitae (CV)</h4>
+                    <p class="font-mono text-stone-700 text-[9px] mt-0.5">drive.google.com/fathy-gendy-cv</p>
                   </div>
                 </a>
 
